@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import './App.css'
+import './App.scss'
 import Preferences from './Preferences';
 import { PrefsContext } from './prefs-context';
 import { ContextSentence, Vocab, VocabResponse } from './WaniKani';
