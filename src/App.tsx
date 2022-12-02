@@ -39,9 +39,10 @@ function Answer(props: AnswerProps) {
                     <button onClick={props.correct}>Right</button>
                     <button onClick={props.incorrect}>Wrong</button>
                 </div>
-                <div>
-                    <a href={'https://translate.google.com/?sl=ja&tl=en&text=' + props.question.sentence.ja} target='_blank'>Open in Google Translate</a>
-                </div>
+                <ul>
+                    <li><a href={props.question.vocab.document_url} target='_blank'>Open in WaniKani</a></li>
+                    <li><a href={'https://translate.google.com/?sl=ja&tl=en&text=' + props.question.sentence.ja} target='_blank'>Sentence in Google Translate</a></li>
+                </ul>
             </>
         );
     }
