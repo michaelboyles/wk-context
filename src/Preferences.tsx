@@ -7,22 +7,18 @@ function Preferences() {
 
     return (
         <CollapsedSection title='Preferences' className='preferences'>
-            <>
-                <label>
-                    API key
-                    <input type='text'
-                           value={apiKey}
-                           onChange={e => setApiKey(e.target.value)}
-                    />
-                </label>
-                <label>
-                    Highlight vocab
-                    <input type='checkbox'
-                           checked={highlightVocab}
-                           onChange={() => setHighlightVocab(!highlightVocab)}
-                    />
-                </label>
-            </>
+            <form>
+                <label>API key</label>
+                <input type='text'
+                       value={apiKey}
+                       onChange={e => setApiKey(e.target.value)}
+                />
+                <label>Highlight vocab</label>
+                <input type='checkbox'
+                       checked={highlightVocab}
+                       onChange={() => setHighlightVocab(!highlightVocab)}
+                />
+            </form>
         </CollapsedSection>
     )
 }

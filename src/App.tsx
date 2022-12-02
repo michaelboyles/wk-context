@@ -3,6 +3,7 @@ import './App.css'
 import Preferences from './Preferences';
 import { PrefsContext } from './prefs-context';
 import { ContextSentence, Vocab, VocabResponse } from './WaniKani';
+import { GoCheck, GoX } from 'react-icons/go';
 
 function randomInt(max: number) {
     return Math.floor(Math.random() * max);
@@ -12,12 +13,12 @@ function Question(props: {question: TQuestion|null}) {
     const { highlightVocab } = useContext(PrefsContext);
 
     if (!props.question) return null;
-    if (!highlightVocab) return <p>{props.question.sentence.ja}</p>;
+    if (!highlightVocab) return <p className='sentence ja'>{props.question.sentence.ja}</p>;
 
     const word = props.question.vocab.characters;
     const regex = new RegExp('(' + word + ')', "g");
     const fragments = props.question.sentence.ja.split(regex);
-    return <p>{
+    return <p className='sentence ja'>{
         fragments.map((fragment, i)=> <span key={i} className={fragment === word ? 'highlight' : ''}>{fragment}</span>)
     }</p>;
 }
@@ -39,20 +40,24 @@ function Answer(props: AnswerProps) {
     if (!props.question) return null;
     if (props.isShowing) {
         return (
-            <>
-                <div>{ props.question.sentence.en }</div>
+            <div className='answer'>
+                <p className='sentence en'>{ props.question.sentence.en }</p>
                 <div>
-                    <button onClick={props.correct}>Right</button>
-                    <button onClick={props.incorrect}>Wrong</button>
+                    <button className='correct' onClick={props.correct}><GoCheck title='Correct' /></button>
+                    <button className='incorrect' onClick={props.incorrect}><GoX title='Incorrect' /></button>
                 </div>
-                <ul>
+                <ul className='links'>
                     <li><a href={props.question.vocab.document_url} target='_blank'>Open in WaniKani</a></li>
                     <li><a href={'https://translate.google.com/?sl=ja&tl=en&text=' + props.question.sentence.ja} target='_blank'>Sentence in Google Translate</a></li>
                 </ul>
-            </>
+            </div>
         );
     }
-    return <button onClick={props.showAnswer}>Show answer</button>;
+    return (
+        <div className='answer'>
+            <button onClick={props.showAnswer}>Show answer</button>
+        </div>
+    );
 }
 
 function App() {
