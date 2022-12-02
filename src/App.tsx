@@ -39,6 +39,9 @@ function Answer(props: AnswerProps) {
                     <button onClick={props.correct}>Right</button>
                     <button onClick={props.incorrect}>Wrong</button>
                 </div>
+                <div>
+                    <a href={'https://translate.google.com/?sl=ja&tl=en&text=' + props.question.sentence.ja} target='_blank'>Open in Google Translate</a>
+                </div>
             </>
         );
     }
@@ -48,7 +51,7 @@ function Answer(props: AnswerProps) {
 function App() {
     const userLevel = 2; // TODO query this
 
-    const [apiKey, setApiKey] = useState('');
+    const [apiKey, setApiKey] = useState('a146a449-147b-4b36-bae2-a1bbe706e6f8');
     const [vocabs, setVocabs] = useState<Vocab[]>([]);
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState<TQuestion|null>(null);
