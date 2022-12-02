@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './App.css'
+import Preferences from './Preferences';
+import { PrefsContext } from './prefs-context';
 import { ContextSentence, Vocab, VocabResponse } from './WaniKani';
 
 function randomInt(max: number) {
@@ -7,7 +9,11 @@ function randomInt(max: number) {
 }
 
 function Question(props: {question: TQuestion|null}) {
+    const { highlightVocab } = useContext(PrefsContext);
+
     if (!props.question) return null;
+    if (!highlightVocab) return <p>{props.question.sentence.ja}</p>;
+
     const word = props.question.vocab.characters;
     const regex = new RegExp('(' + word + ')', "g");
     const fragments = props.question.sentence.ja.split(regex);
@@ -53,6 +59,8 @@ function App() {
     const userLevel = 2; // TODO query this
 
     const [apiKey, setApiKey] = useState('a146a449-147b-4b36-bae2-a1bbe706e6f8');
+    const [highlightVocab, setHighlightVocab] = useState(false);
+
     const [vocabs, setVocabs] = useState<Vocab[]>([]);
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState<TQuestion|null>(null);
@@ -93,22 +101,21 @@ function App() {
     }, [apiKey]);
 
     return (
-        <div className="App">
-            <h1>WaniKani sentence quiz</h1>
-            <input type='text' onChange={e => setApiKey(e.target.value)} />
-            <div className="card">
-                Key is {apiKey}
+        <PrefsContext.Provider value={{ apiKey, setApiKey, highlightVocab, setHighlightVocab }}>
+            <div className="App">
+                <h1>WaniKani sentence quiz</h1>
+                <Question question={currentQuestion}/>
+                <Answer question={currentQuestion}
+                        isShowing={!isQuestionPhase}
+                        showAnswer={() => {
+                            setIsQuestionPhase(false);
+                        }}
+                        correct={() => nextQuestion(vocabs)}
+                        incorrect={() => nextQuestion(vocabs)}
+                />
+                <Preferences />
             </div>
-            <Question question={currentQuestion}/>
-            <Answer question={currentQuestion}
-                    isShowing={!isQuestionPhase}
-                    showAnswer={() => {
-                        setIsQuestionPhase(false);
-                    }}
-                    correct={() => nextQuestion(vocabs)}
-                    incorrect={() => nextQuestion(vocabs)}
-            />
-        </div>
+        </PrefsContext.Provider>
     )
 }
 
