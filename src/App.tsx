@@ -19,7 +19,7 @@ function Question(props: {question: TQuestion|null}) {
     if (!props.question) return null;
     return (
         <>
-            <If condition={!!clientRect && (textContent?.length ?? 0) > 1}>
+            <If condition={!!clientRect && (textContent?.length ?? 0) >= 1}>
                 <div className='popup' style={ {top: clientRect!.y, left: clientRect!.x }}>
                     <a className='jisho' target='_blank'
                        href={'https://jisho.org/search/' + textContent}>
