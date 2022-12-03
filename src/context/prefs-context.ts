@@ -1,15 +1,21 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
+
+type IPrefs = {
+    apiKey: string
+    highlightVocab: boolean
+    nativeLanguageCode: string
+}
 
 type IPrefsContext = {
-    apiKey: string
-    setApiKey: (key: string) => void
-    highlightVocab: boolean
-    setHighlightVocab: (value: boolean) => void
+    values: IPrefs
+    setValues: (values: IPrefs) => void
 }
 
 export const PrefsContext = createContext<IPrefsContext>({
-    apiKey: '',
-    setApiKey: () => {},
-    highlightVocab: true,
-    setHighlightVocab: () => {}
+    values: {
+        apiKey: '',
+        highlightVocab: true,
+        nativeLanguageCode: 'en'
+    },
+    setValues: () => {}
 });

@@ -13,7 +13,7 @@ import { HighlightedSentence } from './components/HighlightedSentence';
 
 function Question(props: {question: TQuestion|null}) {
     const answerRef = useRef<any>();
-    const { highlightVocab } = useContext(PrefsContext);
+    const { values: { highlightVocab, nativeLanguageCode } } = useContext(PrefsContext);
     const { clientRect, textContent } = useSelectedText(answerRef);
 
     if (!props.question) return null;
@@ -21,8 +21,14 @@ function Question(props: {question: TQuestion|null}) {
         <>
             <If condition={!!clientRect && (textContent?.length ?? 0) > 1}>
                 <div className='popup' style={ {top: clientRect!.y, left: clientRect!.x }}>
-                    <a className='jisho' href={'https://jisho.org/search/' + textContent} target='_blank'><Jisho /> Jisho</a>
-                    <a className='gtranslate' href={'https://translate.google.com/?sl=ja&tl=en&text=' + textContent} target='_blank'><SiGoogletranslate /> Google</a>
+                    <a className='jisho' target='_blank'
+                       href={'https://jisho.org/search/' + textContent}>
+                        <Jisho /> Jisho
+                    </a>
+                    <a className='gtranslate' target='_blank'
+                       href={`https://translate.google.com/?sl=ja&tl=${nativeLanguageCode}&text=${textContent}`}>
+                        <SiGoogletranslate /> Google
+                    </a>
                 </div>
             </If>
             <p className='sentence ja' ref={answerRef}>
@@ -75,8 +81,11 @@ function Answer(props: AnswerProps) {
 function App() {
     const userLevel = 2; // TODO query this
 
-    const [apiKey, setApiKey] = useState('a146a449-147b-4b36-bae2-a1bbe706e6f8');
-    const [highlightVocab, setHighlightVocab] = useState(false);
+    const [prefs, setPrefs] = useState({
+        apiKey: 'a146a449-147b-4b36-bae2-a1bbe706e6f8',
+        highlightVocab: true,
+        nativeLanguageCode: 'en'
+    });
 
     const [vocabs, setVocabs] = useState<Vocab[]>([]);
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
@@ -100,13 +109,13 @@ function App() {
     }
 
     useEffect(() => {
-        if (apiKey.length == 36) {
+        if (prefs.apiKey.length == 36) {
             const doFetch = async () => {
                 const levels = [...Array(userLevel).keys()].join();
                 const result = await fetch(
                     `https://api.wanikani.com/v2/subjects?types=vocabulary&levels=${levels}`, {
                     headers: {
-                        'Authorization': `Bearer ${apiKey}`
+                        'Authorization': `Bearer ${prefs.apiKey}`
                     }
                 });
                 const response: VocabResponse = await result.json();
@@ -116,10 +125,10 @@ function App() {
             }
             doFetch();
         }
-    }, [apiKey]);
+    }, [prefs.apiKey]);
 
     return (
-        <PrefsContext.Provider value={{ apiKey, setApiKey, highlightVocab, setHighlightVocab }}>
+        <PrefsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
             <div className="App">
                 <h1>WaniKani sentence quiz</h1>
                 <Question question={currentQuestion}/>
