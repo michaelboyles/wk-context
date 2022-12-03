@@ -111,7 +111,7 @@ function App() {
     useEffect(() => {
         if (prefs.apiKey.length == 36) {
             const doFetch = async () => {
-                const levels = [...Array(userLevel).keys()].join();
+                const levels = [...Array(userLevel).keys()].map(lvl => lvl + 1).join();
                 const result = await fetch(
                     `https://api.wanikani.com/v2/subjects?types=vocabulary&levels=${levels}`, {
                     headers: {
