@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import CollapsedSection from "./CollapsedSection"
-import { PrefsContext } from "./prefs-context"
+import { PrefsContext } from "../context/prefs-context"
 
 function Preferences() {
     const { apiKey, setApiKey, highlightVocab, setHighlightVocab } = useContext(PrefsContext);

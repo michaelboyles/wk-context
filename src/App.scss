@@ -8,6 +8,10 @@
 .sentence.ja {
     font-size: 2em;
     line-height: 100%;
+
+    .highlight {
+        color: red;
+    }
 }
 
 ::selection {

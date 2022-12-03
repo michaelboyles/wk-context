@@ -1,28 +1,15 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import './App.scss'
-import Preferences from './Preferences';
-import { PrefsContext } from './prefs-context';
-import { ContextSentence, Vocab, VocabResponse } from './WaniKani';
+import Preferences from './components/Preferences';
+import { PrefsContext } from './context/prefs-context';
+import { ContextSentence, Vocab, VocabResponse } from './wanikani';
 import { GoCheck, GoX } from 'react-icons/go';
 import { SiGoogletranslate } from 'react-icons/si';
 import { useSelectedText } from './hooks/useSelectedText';
 import { If, Else } from 'jsx-conditionals';
 import { Jisho } from './icons/Jisho';
-import { clearTextSelection } from './util';
-
-function randomInt(max: number) {
-    return Math.floor(Math.random() * max);
-}
-
-function HighlightedSentence(props: {word: string, sentence: string}) {
-    const regex = new RegExp('(' + props.word + ')', "g");
-    const fragments = props.sentence.split(regex);
-    return (<>{
-        fragments.map(
-            (fragment, i)=> <span key={i} className={fragment === props.word ? 'highlight' : ''}>{fragment}</span>
-        )
-    }</>);
-}
+import { clearTextSelection, randomInt } from './util';
+import { HighlightedSentence } from './components/HighlightedSentence';
 
 function Question(props: {question: TQuestion|null}) {
     const answerRef = useRef<any>();
