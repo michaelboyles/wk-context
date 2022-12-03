@@ -1,26 +1,51 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import './App.scss'
 import Preferences from './Preferences';
 import { PrefsContext } from './prefs-context';
 import { ContextSentence, Vocab, VocabResponse } from './WaniKani';
 import { GoCheck, GoX } from 'react-icons/go';
+import { SiGoogletranslate } from 'react-icons/si';
+import { useSelectedText } from './hooks/useSelectedText';
+import { If, Else } from 'jsx-conditionals';
+import { Jisho } from './icons/Jisho';
+import { clearTextSelection } from './util';
 
 function randomInt(max: number) {
     return Math.floor(Math.random() * max);
 }
 
+function HighlightedSentence(props: {word: string, sentence: string}) {
+    const regex = new RegExp('(' + props.word + ')', "g");
+    const fragments = props.sentence.split(regex);
+    return (<>{
+        fragments.map(
+            (fragment, i)=> <span key={i} className={fragment === props.word ? 'highlight' : ''}>{fragment}</span>
+        )
+    }</>);
+}
+
 function Question(props: {question: TQuestion|null}) {
+    const answerRef = useRef<any>();
     const { highlightVocab } = useContext(PrefsContext);
+    const { clientRect, textContent } = useSelectedText(answerRef);
 
     if (!props.question) return null;
-    if (!highlightVocab) return <p className='sentence ja'>{props.question.sentence.ja}</p>;
-
-    const word = props.question.vocab.characters;
-    const regex = new RegExp('(' + word + ')', "g");
-    const fragments = props.question.sentence.ja.split(regex);
-    return <p className='sentence ja'>{
-        fragments.map((fragment, i)=> <span key={i} className={fragment === word ? 'highlight' : ''}>{fragment}</span>)
-    }</p>;
+    return (
+        <>
+            <If condition={!!clientRect && (textContent?.length ?? 0) > 1}>
+                <div className='popup' style={ {top: clientRect!.y, left: clientRect!.x }}>
+                    <a className='jisho' href={'https://jisho.org/search/' + textContent} target='_blank'><Jisho /> Jisho</a>
+                    <a className='gtranslate' href={'https://translate.google.com/?sl=ja&tl=en&text=' + textContent} target='_blank'><SiGoogletranslate /> Google</a>
+                </div>
+            </If>
+            <p className='sentence ja' ref={answerRef}>
+                <If condition={highlightVocab}>
+                    <HighlightedSentence word={props.question.vocab.characters} sentence={props.question.sentence.ja} />
+                </If>
+                <Else>{props.question.sentence.ja}</Else>
+            </p>
+        </>
+    );
 }
 
 type TQuestion = {
@@ -75,6 +100,7 @@ function App() {
             const randomVocabIdx = randomInt(vocabs.length);
             const vocab = vocabs[randomVocabIdx];
             if (vocab?.context_sentences?.length) {
+                clearTextSelection();
                 const randomSentenceIndex = randomInt(vocab.context_sentences.length);
                 setCurrentQuestion({
                     vocab,

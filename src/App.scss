@@ -10,6 +10,50 @@
     line-height: 100%;
 }
 
+::selection {
+    background-color: #0a0a0a;
+    border-radius: 10px;
+}
+
+.popup {
+    position: absolute;
+    display: flex;
+    gap: 15px;
+    background-color: #0a0a0a;
+    user-select: none;
+    translate: 0 -100%;
+    padding: 8px 12px;
+
+    a {
+        display: block;
+        text-decoration: none;
+        color: white;
+        font-size: 14px;
+        line-height: 100%;
+        font-weight: bold;
+
+        svg {
+            display: block;
+            font-size: 25px;
+            margin: 0 auto 5px auto;
+
+            path {
+                fill: white;
+            }
+        }
+        &.gtranslate:hover {
+            svg path {
+                fill: #1967d2;
+            }
+        }
+        &.jisho:hover {
+            svg path {
+                fill: #28cb28;
+            }
+        }
+    }
+}
+
 .answer {
     height: 175px;
 
