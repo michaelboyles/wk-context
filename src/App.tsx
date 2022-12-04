@@ -11,6 +11,7 @@ import { Jisho } from './icons/Jisho';
 import { clearTextSelection, fetchWithKey, randomInt } from './util';
 import { HighlightedSentence } from './components/HighlightedSentence';
 import { useUserLevel } from './hooks/useUserLevel';
+import Welcome from './components/Welcome';
 
 function Question(props: {question: TQuestion|null}) {
     const answerRef = useRef<any>();
@@ -81,11 +82,12 @@ function Answer(props: AnswerProps) {
 
 function App() {
     const [prefs, setPrefs] = useState({
-        apiKey: 'a146a449-147b-4b36-bae2-a1bbe706e6f8',
+        apiKey: '',
         highlightVocab: true,
         nativeLanguageCode: 'en'
     });
     const userLevel = useUserLevel(prefs.apiKey);
+    const [hasBeenWelcomed, setHasBeenWelcomed] = useState(false);
 
     const [vocabs, setVocabs] = useState<Vocab[]>([]);
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
@@ -126,19 +128,27 @@ function App() {
 
     return (
         <PrefsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
-            <div className="App">
-                <h1>WaniKani sentence quiz</h1>
-                <Question question={currentQuestion}/>
-                <Answer question={currentQuestion}
-                        isShowing={!isQuestionPhase}
-                        showAnswer={() => {
-                            setIsQuestionPhase(false);
-                        }}
-                        correct={() => nextQuestion(vocabs)}
-                        incorrect={() => nextQuestion(vocabs)}
-                />
-                <Preferences />
-            </div>
+            <If condition={hasBeenWelcomed}>
+                <div className="App">
+                    <h1>WaniKani sentence quiz</h1>
+                    <Question question={currentQuestion}/>
+                    <Answer question={currentQuestion}
+                            isShowing={!isQuestionPhase}
+                            showAnswer={() => {
+                                setIsQuestionPhase(false);
+                            }}
+                            correct={() => nextQuestion(vocabs)}
+                            incorrect={() => nextQuestion(vocabs)}
+                    />
+                    <Preferences />
+                </div>
+            </If>
+            <Else>
+                <Welcome onKeyEntered={apiKey => {
+                    setHasBeenWelcomed(true);
+                    setPrefs({...prefs, apiKey});
+                }} />
+            </Else>
         </PrefsContext.Provider>
     )
 }

@@ -5,6 +5,35 @@
     text-align: center;
 }
 
+.welcome {
+    .crab { 
+        font-size: 30px;
+    }
+
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        input {
+            width: 290px;
+            margin-left: 10px;
+            padding: 5px 10px;
+    
+            font-family: "Courier New", Courier, monospace;
+            font-weight: bold;
+        }
+        .validity {
+            height: 16px;
+            width: 16px;
+            
+            svg path {
+                fill: red;
+            }
+        }
+    }
+}
+
 .sentence.ja {
     font-size: 2em;
     line-height: 1.3em;
