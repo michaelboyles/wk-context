@@ -14,6 +14,7 @@ import { HighlightedSentence } from './components/HighlightedSentence';
 import { useUserLevel } from './hooks/useUserLevel';
 import Welcome from './components/Welcome';
 import { useCookie } from './hooks/useCookie';
+import { useVocabs } from './hooks/useVocab';
 
 function Question(props: {question: TQuestion|null}) {
     const answerRef = useRef<any>();
@@ -86,11 +87,12 @@ function App() {
     const [prefs, setPrefs] = useCookie();
 
     const userLevel = useUserLevel(prefs.apiKey);
-    const [vocabs, setVocabs] = useState<Vocab[]>([]);
+    const vocabs = useVocabs(userLevel, prefs.apiKey);
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState<TQuestion|null>(null);
 
-    const nextQuestion = (vocabs: Vocab[]) => {
+    const nextQuestion = () => {
+        if (vocabs.length < 1) return;
         while (true) {
             const randomVocabIdx = randomInt(vocabs.length);
             const vocab = vocabs[randomVocabIdx];
@@ -108,20 +110,8 @@ function App() {
     }
 
     useEffect(() => {
-        if (isValidApiKeyFormat(prefs.apiKey) && userLevel > 0) {
-            const doFetch = async () => {
-                const levels = [...Array(userLevel).keys()].map(lvl => lvl + 1).join();
-                const result = await fetchWithKey(
-                    `https://api.wanikani.com/v2/subjects?types=vocabulary&levels=${levels}`, prefs.apiKey
-                );
-                const response: VocabResponse = await result.json();
-                const newVocabs = vocabs.concat(response.data.map(d => d.data));
-                setVocabs(newVocabs);
-                nextQuestion(newVocabs);
-            }
-            doFetch();
-        }
-    }, [prefs.apiKey, userLevel]);
+        if (!currentQuestion) nextQuestion();
+    }, [vocabs.length]);
 
     return (
         <PrefsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
@@ -134,8 +124,8 @@ function App() {
                             showAnswer={() => {
                                 setIsQuestionPhase(false);
                             }}
-                            correct={() => nextQuestion(vocabs)}
-                            incorrect={() => nextQuestion(vocabs)}
+                            correct={nextQuestion}
+                            incorrect={nextQuestion}
                     />
                     <Preferences />
                 </div>
