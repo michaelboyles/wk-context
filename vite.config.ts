@@ -5,6 +5,7 @@ import ttypescript from 'ttypescript'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base: '',
     plugins: [
         react(),
         typescript({

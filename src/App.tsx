@@ -159,7 +159,7 @@ function App() {
                 </Else>
             </div>
             <footer>
-                <a href='https://github.com/michaelboyles/wk-sentences'>Contribute on GitHub</a>
+                <a href='https://github.com/michaelboyles/wk-context'>Contribute on GitHub</a>
                 <span>Content is © WaniKani</span>
             </footer>
         </PrefsContext.Provider>
