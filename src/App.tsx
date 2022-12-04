@@ -15,6 +15,7 @@ import { useUserLevel } from './hooks/useUserLevel';
 import Welcome from './components/Welcome';
 import { useCookie } from './hooks/useCookie';
 import { useVocabs } from './hooks/useVocab';
+import { GiSadCrab } from 'react-icons/gi';
 
 function Question(props: {question: TQuestion|null}) {
     const answerRef = useRef<any>();
@@ -70,8 +71,7 @@ function Answer(props: AnswerProps) {
                     <button className='incorrect' onClick={props.incorrect}><GoX title='Incorrect' /></button>
                 </div>
                 <ul className='links'>
-                    <li><a href={props.question.vocab.document_url} target='_blank'>Open in WaniKani</a></li>
-                    <li><a href={'https://translate.google.com/?sl=ja&tl=en&text=' + props.question.sentence.ja} target='_blank'>Sentence in Google Translate</a></li>
+                    <li><a href={props.question.vocab.document_url} target='_blank'>View { props.question.vocab.characters } in <GiSadCrab className='crab' /></a></li>
                 </ul>
             </div>
         );
