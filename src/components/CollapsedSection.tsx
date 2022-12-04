@@ -10,8 +10,9 @@ type Props = {
 function Preferences(props: Props) {
     const [isExpanded, setIsExpanded] = useState(false);
 
+    const baseClassName = 'collapsable ' + (isExpanded ? 'open ' : 'closed ');
     return (
-        <div className={'collapsed ' + props?.className ?? ''}>
+        <div className={baseClassName + props?.className ?? ''}>
             <h2 onClick={() => setIsExpanded(!isExpanded)}>{props.title} {isExpanded ? <GoChevronUp title='collapse' /> : <GoChevronDown title='expand' /> }</h2>
             { isExpanded ? props.children : null }
         </div>
