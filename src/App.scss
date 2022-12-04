@@ -94,23 +94,51 @@
         list-style: none;
         padding: 0;
     }
-}
 
-button {
-    border: 0;
-    border-radius: 2px;
-    padding: 5px 6px 1px 6px;
-    margin: 0 3px;
-    cursor: pointer;
-    font-size: 20px;
-
-    &.correct {
+    .correct,.incorrect {
+        border: 0;
+        border-radius: 2px;
+        padding: 5px 6px 1px 6px;
+        margin: 0 3px;
+        cursor: pointer;
+        font-size: 20px;
+    }
+    
+    .correct {
         color: #328b30;
         background: white;
+    
+        &:hover {
+            background: #eaeaea;
+        }
     }
-
-    &.incorrect {
+    
+    .incorrect {
+        color: white;
         background: #bb0404;
+    
+        &:hover {
+            background: #a70202;
+        }
+    }
+    
+    .showAnswer {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 12px;
+        margin: 0 auto;
+        border: 0;
+        border-radius: 2px;
+        cursor: pointer;
+        font-weight: bold;
+
+        svg {
+            font-size: 22px;
+        }
+        &:hover {
+            background-color: #5a5a5a;
+        }
     }
 }
 

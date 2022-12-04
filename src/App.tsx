@@ -1,8 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import './App.scss'
 import Preferences from './components/Preferences';
-import { IPrefs, PrefsContext } from './context/prefs-context';
+import { PrefsContext } from './context/prefs-context';
 import { ContextSentence, Vocab, VocabResponse } from './wanikani';
+import { IoMdChatboxes } from 'react-icons/io';
 import { GoCheck, GoX } from 'react-icons/go';
 import { SiGoogletranslate } from 'react-icons/si';
 import { useSelectedText } from './hooks/useSelectedText';
@@ -76,7 +77,7 @@ function Answer(props: AnswerProps) {
     }
     return (
         <div className='answer'>
-            <button onClick={props.showAnswer}>Show answer</button>
+            <button className='showAnswer' onClick={props.showAnswer}><IoMdChatboxes /> Show Answer</button>
         </div>
     );
 }
