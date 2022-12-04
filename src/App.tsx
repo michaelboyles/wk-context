@@ -83,6 +83,16 @@ function Answer(props: AnswerProps) {
     );
 }
 
+function Stats(props: {correct: number, wrong: number}) {
+    const total = props.correct + props.wrong;
+    const percentage = total === 0 ? 100 : Math.floor(props.correct / total * 100);
+    return (
+        <section className='stats'>
+            { `${props.correct} / ${total} (${percentage}%)` }
+        </section>
+    )
+}
+
 function App() {
     const [prefs, setPrefs] = useCookie();
 
@@ -94,6 +104,8 @@ function App() {
     );
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState<TQuestion|null>(null);
+    const [correct, setCorrect] = useState(0);
+    const [wrong, setWrong] = useState(0);
 
     const nextQuestion = () => {
         if (vocabs.length < 1) return;
@@ -129,9 +141,16 @@ function App() {
                                 showAnswer={() => {
                                     setIsQuestionPhase(false);
                                 }}
-                                correct={nextQuestion}
-                                incorrect={nextQuestion}
+                                correct={() => {
+                                    setCorrect(correct + 1);
+                                    nextQuestion();
+                                }}
+                                incorrect={() => {
+                                    setWrong(wrong + 1);
+                                    nextQuestion();
+                                }}
                         />
+                        <Stats correct={correct} wrong={wrong} />
                         <Preferences userLevel={userLevel} />
                     </div>
                 </If>

@@ -29,6 +29,7 @@
 
 .App {
     display: grid;
+    gap: 25px;
     grid-template-columns: 100%;
     justify-items: center;
     align-items: center;
@@ -52,6 +53,7 @@ footer {
 .sentence.ja {
     font-size: 2em;
     line-height: 1.3em;
+    margin: 0;
 
     .highlight {
         color: red;
@@ -104,6 +106,10 @@ footer {
 
 .answer {
     height: 175px;
+
+    .sentence.en {
+        margin: 0 0 1em 0;
+    }
 
     .links {
         list-style: none;
@@ -250,9 +256,12 @@ footer {
 
 .App.vertical {
     grid-template-columns: 50% 50%;
-    gap: 25px;
 
     h1 {
+        grid-column: 1/3;
+    }
+
+    .stats {
         grid-column: 1/3;
     }
 
