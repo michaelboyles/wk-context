@@ -119,24 +119,30 @@ function App() {
 
     return (
         <PrefsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
-            <If condition={prefs.apiKey.length >= 1}>
-                <div className={'App ' + (prefs.isQuestionVertical ? 'vertical' : 'horizontal')}>
-                    <h1>WaniKani sentence quiz</h1>
-                    <Question question={currentQuestion}/>
-                    <Answer question={currentQuestion}
-                            isShowing={!isQuestionPhase}
-                            showAnswer={() => {
-                                setIsQuestionPhase(false);
-                            }}
-                            correct={nextQuestion}
-                            incorrect={nextQuestion}
-                    />
-                    <Preferences userLevel={userLevel} />
-                </div>
-            </If>
-            <Else>
-                <Welcome onKeyEntered={apiKey => setPrefs({...prefs, apiKey})} />
-            </Else>
+            <div className='content'>
+                <If condition={prefs.apiKey.length >= 1}>
+                    <div className={'App ' + (prefs.isQuestionVertical ? 'vertical' : 'horizontal')}>
+                        <h1>WaniKani sentence quiz</h1>
+                        <Question question={currentQuestion}/>
+                        <Answer question={currentQuestion}
+                                isShowing={!isQuestionPhase}
+                                showAnswer={() => {
+                                    setIsQuestionPhase(false);
+                                }}
+                                correct={nextQuestion}
+                                incorrect={nextQuestion}
+                        />
+                        <Preferences userLevel={userLevel} />
+                    </div>
+                </If>
+                <Else>
+                    <Welcome onKeyEntered={apiKey => setPrefs({...prefs, apiKey})} />
+                </Else>
+            </div>
+            <footer>
+                <a href='https://github.com/michaelboyles/wk-sentences'>Contribute on GitHub</a>
+                <span>Content is © WaniKani</span>
+            </footer>
         </PrefsContext.Provider>
     )
 }

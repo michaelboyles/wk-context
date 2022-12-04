@@ -1,10 +1,3 @@
-#root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
-}
-
 .welcome {
     .crab { 
         font-size: 30px;
@@ -39,6 +32,21 @@
     grid-template-columns: 100%;
     justify-items: center;
     align-items: center;
+}
+
+.content {
+    flex: 1;
+}
+
+footer {
+    color: #888888;
+    font-size: 12px;
+    margin-top: 2em;
+
+    a {
+        color: #888888;
+        margin-right: 10px;
+    }
 }
 
 .sentence.ja {
@@ -102,6 +110,7 @@
         padding: 0;
 
         a {
+            display: inline-block;
             background-color: white;
             border-radius: 2px;
             padding: 5px 20px;
