@@ -1,17 +1,18 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import './App.scss'
 import Preferences from './components/Preferences';
-import { PrefsContext } from './context/prefs-context';
+import { IPrefs, PrefsContext } from './context/prefs-context';
 import { ContextSentence, Vocab, VocabResponse } from './wanikani';
 import { GoCheck, GoX } from 'react-icons/go';
 import { SiGoogletranslate } from 'react-icons/si';
 import { useSelectedText } from './hooks/useSelectedText';
 import { If, Else } from 'jsx-conditionals';
 import { Jisho } from './icons/Jisho';
-import { clearTextSelection, fetchWithKey, randomInt } from './util';
+import { clearTextSelection, fetchWithKey, isValidApiKeyFormat, randomInt, readCookie, saveCookie } from './util';
 import { HighlightedSentence } from './components/HighlightedSentence';
 import { useUserLevel } from './hooks/useUserLevel';
 import Welcome from './components/Welcome';
+import { useCookie } from './hooks/useCookie';
 
 function Question(props: {question: TQuestion|null}) {
     const answerRef = useRef<any>();
@@ -81,14 +82,9 @@ function Answer(props: AnswerProps) {
 }
 
 function App() {
-    const [prefs, setPrefs] = useState({
-        apiKey: '',
-        highlightVocab: true,
-        nativeLanguageCode: 'en'
-    });
-    const userLevel = useUserLevel(prefs.apiKey);
-    const [hasBeenWelcomed, setHasBeenWelcomed] = useState(false);
+    const [prefs, setPrefs] = useCookie();
 
+    const userLevel = useUserLevel(prefs.apiKey);
     const [vocabs, setVocabs] = useState<Vocab[]>([]);
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState<TQuestion|null>(null);
@@ -111,7 +107,7 @@ function App() {
     }
 
     useEffect(() => {
-        if (prefs.apiKey.length == 36 && userLevel > 0) {
+        if (isValidApiKeyFormat(prefs.apiKey) && userLevel > 0) {
             const doFetch = async () => {
                 const levels = [...Array(userLevel).keys()].map(lvl => lvl + 1).join();
                 const result = await fetchWithKey(
@@ -128,7 +124,7 @@ function App() {
 
     return (
         <PrefsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
-            <If condition={hasBeenWelcomed}>
+            <If condition={prefs.apiKey.length >= 1}>
                 <div className="App">
                     <h1>WaniKani sentence quiz</h1>
                     <Question question={currentQuestion}/>
@@ -144,10 +140,7 @@ function App() {
                 </div>
             </If>
             <Else>
-                <Welcome onKeyEntered={apiKey => {
-                    setHasBeenWelcomed(true);
-                    setPrefs({...prefs, apiKey});
-                }} />
+                <Welcome onKeyEntered={apiKey => setPrefs({...prefs, apiKey})} />
             </Else>
         </PrefsContext.Provider>
     )

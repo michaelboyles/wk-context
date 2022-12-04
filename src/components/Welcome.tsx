@@ -2,19 +2,16 @@ import { If } from 'jsx-conditionals';
 import { useEffect, useState } from 'react'
 import { GiSadCrab } from 'react-icons/gi'
 import { GoX } from 'react-icons/go'
-
-function isValidTokenFormat(possibleToken: string) {
-    return /^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/g.test(possibleToken);
-}
+import { isValidApiKeyFormat } from '../util';
 
 function Welcome(props: { onKeyEntered: (key: string) => void }) {
-    const [token, setToken] = useState('');
-    const isValidToken = isValidTokenFormat(token);
+    const [key, setKey] = useState('');
+    const isValidKey = isValidApiKeyFormat(key);
     useEffect(() => {
-        if (isValidToken) {
-            props.onKeyEntered(token);
+        if (isValidKey) {
+            props.onKeyEntered(key);
         }
-    }, [isValidToken]);
+    }, [isValidKey]);
     return (
         <section className='welcome'>
             <h2>Hello</h2>
@@ -27,12 +24,12 @@ function Welcome(props: { onKeyEntered: (key: string) => void }) {
             <form>
                 <label>API key</label>
                 <input type='text'
-                    value={token}
-                    onChange={e => setToken(e.target.value.trim())}
+                    value={key}
+                    onChange={e => setKey(e.target.value.trim())}
                     maxLength={36}
                 />
                 <div className='validity'>
-                    <If condition={token.length > 0 && !isValidToken}>
+                    <If condition={key.length > 0 && !isValidKey}>
                         <GoX title='Incorrect key' />
                     </If>
                 </div>

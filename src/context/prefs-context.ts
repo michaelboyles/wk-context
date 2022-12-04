@@ -1,6 +1,12 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 
-type IPrefs = {
+export const DEFAULT_PREFS = Object.freeze({
+    apiKey: '',
+    highlightVocab: true,
+    nativeLanguageCode: 'en'
+});
+
+export type IPrefs = {
     apiKey: string
     highlightVocab: boolean
     nativeLanguageCode: string
@@ -12,10 +18,6 @@ type IPrefsContext = {
 }
 
 export const PrefsContext = createContext<IPrefsContext>({
-    values: {
-        apiKey: '',
-        highlightVocab: true,
-        nativeLanguageCode: 'en'
-    },
+    values: DEFAULT_PREFS,
     setValues: () => {}
 });
