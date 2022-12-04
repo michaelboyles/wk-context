@@ -199,5 +199,14 @@
             display: inline-block;
             justify-items: start;
         }
+
+        .levelInput {
+            display: flex;
+            align-items: center;
+            
+            label {
+                margin: 0 2px 0 30px;
+            }
+        }
     }
 }

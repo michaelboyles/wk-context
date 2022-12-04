@@ -87,7 +87,11 @@ function App() {
     const [prefs, setPrefs] = useCookie();
 
     const userLevel = useUserLevel(prefs.apiKey);
-    const vocabs = useVocabs(userLevel, prefs.apiKey);
+    const vocabs = useVocabs(
+        prefs.minVocabLevel === 'mine' ? userLevel : prefs.minVocabLevel,
+        prefs.maxVocabLevel === 'mine' ? userLevel : prefs.maxVocabLevel,
+        prefs.apiKey
+    );
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState<TQuestion|null>(null);
 
@@ -127,7 +131,7 @@ function App() {
                             correct={nextQuestion}
                             incorrect={nextQuestion}
                     />
-                    <Preferences />
+                    <Preferences userLevel={userLevel} />
                 </div>
             </If>
             <Else>

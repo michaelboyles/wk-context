@@ -1,10 +1,11 @@
 import { useContext } from "react"
 import CollapsedSection from "./CollapsedSection"
 import { PrefsContext } from "../context/prefs-context"
+import LevelInput from "./LevelInput";
 
-function Preferences() {
+function Preferences(props: {userLevel: number}) {
     const { values, setValues } = useContext(PrefsContext);
-    const { apiKey, highlightVocab, nativeLanguageCode } = values;
+    const { apiKey, highlightVocab, nativeLanguageCode, minVocabLevel, maxVocabLevel } = values;
 
     return (
         <CollapsedSection title='Preferences' className='preferences'>
@@ -18,6 +19,16 @@ function Preferences() {
                 <input type='checkbox'
                        checked={highlightVocab}
                        onChange={() => setValues({...values, highlightVocab: !highlightVocab })}
+                />
+                <label>Min vocab level</label>
+                <LevelInput level={minVocabLevel}
+                            userLevel={props.userLevel}
+                            setValue={level => setValues({...values, minVocabLevel: level})}
+                />
+                <label>Max vocab level</label>
+                <LevelInput level={maxVocabLevel}
+                            userLevel={props.userLevel}
+                            setValue={level => setValues({...values, maxVocabLevel: level})}
                 />
                 <label>Native language code</label>
                 <input type='text'

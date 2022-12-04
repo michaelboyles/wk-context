@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { fetchWithKey, isValidApiKeyFormat } from "../util";
 import { Vocab, VocabResponse } from "../wanikani";
 
-export function useVocabs(userLevel: number, apiKey: string, delayInMillis: number = 5_000) {
+export function useVocabs(minLevel: number, maxLevel: number, apiKey: string, delayInMillis: number = 5_000) {
     let [vocabs, setVocabs] = useState<Vocab[]>([]);
     useEffect(() => {
-        if (isValidApiKeyFormat(apiKey) && userLevel > 0) {
+        if (isValidApiKeyFormat(apiKey) && maxLevel > 0) {
             vocabs = [];
 
-            const levels = [...Array(userLevel).keys()].map(lvl => lvl + 1).join();
+            const levels = [...Array(maxLevel).keys()]
+                .map(lvl => lvl + 1)
+                .filter(lvl => lvl >= minLevel)
+                .join();
             const url = `https://api.wanikani.com/v2/subjects?types=vocabulary&levels=${levels}`;
 
             const doFetch = async (url: string, vocabs: Vocab[]) => {
@@ -22,6 +25,6 @@ export function useVocabs(userLevel: number, apiKey: string, delayInMillis: numb
             }
             doFetch(url, vocabs);
         }
-    }, [apiKey, userLevel]);
+    }, [apiKey, minLevel, maxLevel]);
     return vocabs;
 }
