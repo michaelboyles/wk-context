@@ -8,6 +8,7 @@ export type IPrefs = {
     nativeLanguageCode: string
     minVocabLevel: Level
     maxVocabLevel: Level
+    isQuestionVertical: boolean
 }
 
 type IPrefsContext = {
@@ -20,7 +21,8 @@ export const DEFAULT_PREFS: IPrefs = Object.freeze({
     highlightVocab: true,
     nativeLanguageCode: 'en',
     minVocabLevel: 1,
-    maxVocabLevel: 'mine'
+    maxVocabLevel: 'mine',
+    isQuestionVertical: false
 });
 
 export const PrefsContext = createContext<IPrefsContext>({

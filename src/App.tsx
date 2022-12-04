@@ -2,14 +2,14 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import './App.scss'
 import Preferences from './components/Preferences';
 import { PrefsContext } from './context/prefs-context';
-import { ContextSentence, Vocab, VocabResponse } from './wanikani';
+import { ContextSentence, Vocab } from './wanikani';
 import { IoMdChatboxes } from 'react-icons/io';
 import { GoCheck, GoX } from 'react-icons/go';
 import { SiGoogletranslate } from 'react-icons/si';
 import { useSelectedText } from './hooks/useSelectedText';
 import { If, Else } from 'jsx-conditionals';
 import { Jisho } from './icons/Jisho';
-import { clearTextSelection, fetchWithKey, isValidApiKeyFormat, randomInt, readCookie, saveCookie } from './util';
+import { clearTextSelection, randomInt } from './util';
 import { HighlightedSentence } from './components/HighlightedSentence';
 import { useUserLevel } from './hooks/useUserLevel';
 import Welcome from './components/Welcome';
@@ -120,7 +120,7 @@ function App() {
     return (
         <PrefsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
             <If condition={prefs.apiKey.length >= 1}>
-                <div className="App">
+                <div className={'App ' + (prefs.isQuestionVertical ? 'vertical' : 'horizontal')}>
                     <h1>WaniKani sentence quiz</h1>
                     <Question question={currentQuestion}/>
                     <Answer question={currentQuestion}

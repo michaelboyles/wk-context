@@ -5,7 +5,7 @@ import LevelInput from "./LevelInput";
 
 function Preferences(props: {userLevel: number}) {
     const { values, setValues } = useContext(PrefsContext);
-    const { apiKey, highlightVocab, nativeLanguageCode, minVocabLevel, maxVocabLevel } = values;
+    const { apiKey, highlightVocab, nativeLanguageCode, minVocabLevel, maxVocabLevel, isQuestionVertical } = values;
 
     return (
         <CollapsedSection title='Preferences' className='preferences'>
@@ -19,6 +19,11 @@ function Preferences(props: {userLevel: number}) {
                 <input type='checkbox'
                        checked={highlightVocab}
                        onChange={() => setValues({...values, highlightVocab: !highlightVocab })}
+                />
+                <label>Vertical question</label>
+                <input type='checkbox'
+                       checked={isQuestionVertical}
+                       onChange={() => setValues({...values, isQuestionVertical: !isQuestionVertical })}
                 />
                 <label>Min vocab level</label>
                 <LevelInput level={minVocabLevel}
