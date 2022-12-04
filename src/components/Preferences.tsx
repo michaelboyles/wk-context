@@ -12,7 +12,7 @@ function Preferences() {
                 <label>API key</label>
                 <input type='text'
                        value={apiKey}
-                       onChange={e => setValues({...values, apiKey: e.target.value })}
+                       onChange={e => setValues({...values, apiKey: e.target.value.trim() })}
                 />
                 <label>Highlight vocab</label>
                 <input type='checkbox'
