@@ -15,7 +15,7 @@ import { useUserLevel } from './hooks/useUserLevel';
 import Welcome from './components/Welcome';
 import { useCookie } from './hooks/useCookie';
 import { useVocabs } from './hooks/useVocab';
-import { GiSadCrab } from 'react-icons/gi';
+import { GiCrabClaw, GiSadCrab } from 'react-icons/gi';
 
 function Question(props: {question: TQuestion|null}) {
     const answerRef = useRef<any>();
@@ -134,7 +134,7 @@ function App() {
             <div className='content'>
                 <If condition={prefs.apiKey.length >= 1}>
                     <div className={'App ' + (prefs.isQuestionVertical ? 'vertical' : 'horizontal')}>
-                        <h1>WaniKani sentence quiz</h1>
+                        <h1><GiCrabClaw /> WKContext</h1>
                         <Question question={currentQuestion}/>
                         <Answer question={currentQuestion}
                                 isShowing={!isQuestionPhase}

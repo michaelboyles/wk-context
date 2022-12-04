@@ -1,3 +1,14 @@
+$theme-error-red: #bb0404;
+$theme-error-red-light: #ec0000;
+$theme-error-red-dark: #a70202; 
+
+$theme-correct-green: #328b30;
+
+$theme-wk-blue: #1c45f5;
+$theme-wk-pink: #ff00aa;
+
+$theme-off-white: #eaeaea;
+
 .welcome {
     .crab { 
         font-size: 30px;
@@ -21,7 +32,7 @@
             width: 16px;
             
             svg path {
-                fill: red;
+                fill: $theme-error-red-light;
             }
         }
     }
@@ -33,6 +44,14 @@
     grid-template-columns: 100%;
     justify-items: center;
     align-items: center;
+
+    h1 {
+        color: #888888;
+        width: 100%;
+        text-align: left;
+        margin: 0;
+        user-select: none;
+    }
 }
 
 .content {
@@ -56,7 +75,7 @@ footer {
     margin: 0;
 
     .highlight {
-        color: red;
+        color: $theme-wk-pink;
     }
 }
 
@@ -121,7 +140,7 @@ footer {
             border-radius: 2px;
             padding: 5px 20px;
             vertical-align: middle;
-            color: #1c45f5;
+            color: $theme-wk-blue;
             text-decoration: none;
             font-weight: bold;
 
@@ -133,7 +152,7 @@ footer {
             }
 
             &:hover {
-                background: #eaeaea;
+                background: $theme-off-white;
             }
         }
     }
@@ -148,20 +167,20 @@ footer {
     }
     
     .correct {
-        color: #328b30;
+        color: $theme-correct-green;
         background: white;
     
         &:hover {
-            background: #eaeaea;
+            background: $theme-off-white;
         }
     }
     
     .incorrect {
         color: white;
-        background: #bb0404;
+        background: $theme-error-red;
     
         &:hover {
-            background: #a70202;
+            background: $theme-error-red-dark;
         }
     }
     
