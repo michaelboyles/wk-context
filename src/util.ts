@@ -12,3 +12,11 @@ export function clearTextSelection() {
 export function randomInt(max: number) {
     return Math.floor(Math.random() * max);
 }
+
+export function fetchWithKey(url: string, apiKey: string) {
+    return fetch(url, {
+        headers: {
+            'Authorization': `Bearer ${apiKey}`
+        }
+    }) 
+}

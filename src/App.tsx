@@ -8,8 +8,9 @@ import { SiGoogletranslate } from 'react-icons/si';
 import { useSelectedText } from './hooks/useSelectedText';
 import { If, Else } from 'jsx-conditionals';
 import { Jisho } from './icons/Jisho';
-import { clearTextSelection, randomInt } from './util';
+import { clearTextSelection, fetchWithKey, randomInt } from './util';
 import { HighlightedSentence } from './components/HighlightedSentence';
+import { useUserLevel } from './hooks/useUserLevel';
 
 function Question(props: {question: TQuestion|null}) {
     const answerRef = useRef<any>();
@@ -79,13 +80,12 @@ function Answer(props: AnswerProps) {
 }
 
 function App() {
-    const userLevel = 2; // TODO query this
-
     const [prefs, setPrefs] = useState({
         apiKey: 'a146a449-147b-4b36-bae2-a1bbe706e6f8',
         highlightVocab: true,
         nativeLanguageCode: 'en'
     });
+    const userLevel = useUserLevel(prefs.apiKey);
 
     const [vocabs, setVocabs] = useState<Vocab[]>([]);
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
@@ -109,15 +109,12 @@ function App() {
     }
 
     useEffect(() => {
-        if (prefs.apiKey.length == 36) {
+        if (prefs.apiKey.length == 36 && userLevel > 0) {
             const doFetch = async () => {
                 const levels = [...Array(userLevel).keys()].map(lvl => lvl + 1).join();
-                const result = await fetch(
-                    `https://api.wanikani.com/v2/subjects?types=vocabulary&levels=${levels}`, {
-                    headers: {
-                        'Authorization': `Bearer ${prefs.apiKey}`
-                    }
-                });
+                const result = await fetchWithKey(
+                    `https://api.wanikani.com/v2/subjects?types=vocabulary&levels=${levels}`, prefs.apiKey
+                );
                 const response: VocabResponse = await result.json();
                 const newVocabs = vocabs.concat(response.data.map(d => d.data));
                 setVocabs(newVocabs);
@@ -125,7 +122,7 @@ function App() {
             }
             doFetch();
         }
-    }, [prefs.apiKey]);
+    }, [prefs.apiKey, userLevel]);
 
     return (
         <PrefsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
