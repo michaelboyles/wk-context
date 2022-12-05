@@ -97,7 +97,7 @@ function App() {
     const [prefs, setPrefs] = useCookie();
 
     const userLevel = useUserLevel(prefs.apiKey);
-    const vocabs = useVocabs(
+    const { vocabs, isVocabLoading } = useVocabs(
         prefs.minVocabLevel === 'mine' ? userLevel : prefs.minVocabLevel,
         prefs.maxVocabLevel === 'mine' ? userLevel : prefs.maxVocabLevel,
         prefs.minSrsStage,
@@ -109,19 +109,23 @@ function App() {
     const [wrong, setWrong] = useState(0);
 
     const nextQuestion = () => {
-        if (vocabs.length < 1) return;
-        while (true) {
-            const randomVocabIdx = randomInt(vocabs.length);
-            const vocab = vocabs[randomVocabIdx];
-            if (vocab?.context_sentences?.length) {
-                clearTextSelection();
-                const randomSentenceIndex = randomInt(vocab.context_sentences.length);
-                setCurrentQuestion({
-                    vocab,
-                    sentence: vocab.context_sentences[randomSentenceIndex]
-                });
-                setIsQuestionPhase(true);
-                break;
+        if (vocabs.length < 1) {
+            setCurrentQuestion(null);
+        }
+        else {
+            while (true) {
+                const randomVocabIdx = randomInt(vocabs.length);
+                const vocab = vocabs[randomVocabIdx];
+                if (vocab?.context_sentences?.length) {
+                    clearTextSelection();
+                    const randomSentenceIndex = randomInt(vocab.context_sentences.length);
+                    setCurrentQuestion({
+                        vocab,
+                        sentence: vocab.context_sentences[randomSentenceIndex]
+                    });
+                    setIsQuestionPhase(true);
+                    break;
+                }
             }
         }
     }
@@ -136,21 +140,31 @@ function App() {
                 <h1><GiCrabClaw /> WKContext</h1>
                 <If condition={prefs.apiKey.length >= 1}>
                     <div className={'App ' + (prefs.isQuestionVertical ? 'vertical' : 'horizontal')}>
-                        <Question question={currentQuestion}/>
-                        <Answer question={currentQuestion}
-                                isShowing={!isQuestionPhase}
-                                showAnswer={() => {
-                                    setIsQuestionPhase(false);
-                                }}
-                                correct={() => {
-                                    setCorrect(correct + 1);
-                                    nextQuestion();
-                                }}
-                                incorrect={() => {
-                                    setWrong(wrong + 1);
-                                    nextQuestion();
-                                }}
-                        />
+                        <If condition={!!currentQuestion}>
+                            <Question question={currentQuestion}/>
+                            <Answer question={currentQuestion}
+                                    isShowing={!isQuestionPhase}
+                                    showAnswer={() => {
+                                        setIsQuestionPhase(false);
+                                    }}
+                                    correct={() => {
+                                        setCorrect(correct + 1);
+                                        nextQuestion();
+                                    }}
+                                    incorrect={() => {
+                                        setWrong(wrong + 1);
+                                        nextQuestion();
+                                    }}
+                            />
+                        </If>
+                        <Else>
+                            <If condition={isVocabLoading}>
+                                <div className='loading'>Loading...</div>
+                            </If>
+                            <Else>
+                                <div className='no-questions'>No questions match your current settings</div>
+                            </Else>
+                        </Else>
                         <Stats correct={correct} wrong={wrong} />
                         <Preferences userLevel={userLevel} />
                     </div>

@@ -13,9 +13,12 @@ function getIdSet(min: number, max: number): string {
         .join();
 }
 
+const INITIAL_VOCABS: VocabWithId[] = [];
+const INITIAL_SUBJECT_IDS: number[] = [];
+
 export function useVocabs(minLevel: number, maxLevel: number, minSrsStage: number, apiKey: string, delayInMillis: number = 5_000) {
-    let [vocabs, setVocabs] = useState<VocabWithId[]>([]);
-    let [relevantSubjectIds, setRelevantSubjectIds] = useState<number[]>([]);
+    let [vocabs, setVocabs] = useState<VocabWithId[]>(INITIAL_VOCABS);
+    let [relevantSubjectIds, setRelevantSubjectIds] = useState<number[]>(INITIAL_SUBJECT_IDS);
 
     useEffect(() => {
         if (maxLevel <= 0 || !isValidApiKeyFormat(apiKey)) return;
@@ -57,8 +60,8 @@ export function useVocabs(minLevel: number, maxLevel: number, minSrsStage: numbe
         fetchAssignments(`https://api.wanikani.com/v2/assignments?types=vocabulary&srs_stages=${stages}`, relevantSubjectIds);
     }, [apiKey, minSrsStage]);
     
-    if (minSrsStage < 1) {
-        return vocabs;
+    return {
+        vocabs: (minSrsStage < 1) ? vocabs : vocabs.filter(vocab => relevantSubjectIds.includes(vocab.id)),
+        isVocabLoading: vocabs === INITIAL_VOCABS || (minSrsStage >= 1 && relevantSubjectIds === INITIAL_SUBJECT_IDS)
     }
-    return vocabs.filter(vocab => relevantSubjectIds.includes(vocab.id));
 }
