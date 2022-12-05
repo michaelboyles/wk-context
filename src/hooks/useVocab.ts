@@ -26,17 +26,19 @@ export function useVocabs(minLevel: number, maxLevel: number, minSrsStage: numbe
 
         const fetchVocab = async (url: string, vocabs: VocabWithId[]) => {
             const result = await fetchWithKey(url, apiKey);
-            const response: VocabResponse = await result.json();
-            const newVocabs = vocabs.concat(
-                response.data.map(d => {
-                    return { id: d.id, ...d.data };
-                })
-            );
-            if (response.pages.next_url) {
-                const nextUrl = response.pages.next_url;
-                setTimeout(() => fetchVocab(nextUrl, newVocabs), delayInMillis);
+            if (result.ok) {
+                const response: VocabResponse = await result.json();
+                const newVocabs = vocabs.concat(
+                    response.data.map(d => {
+                        return { id: d.id, ...d.data };
+                    })
+                );
+                if (response.pages.next_url) {
+                    const nextUrl = response.pages.next_url;
+                    setTimeout(() => fetchVocab(nextUrl, newVocabs), delayInMillis);
+                }
+                setVocabs(newVocabs);
             }
-            setVocabs(newVocabs);
         }
         const levels = getIdSet(minLevel, maxLevel);
         fetchVocab(`https://api.wanikani.com/v2/subjects?types=vocabulary&levels=${levels}`, vocabs);
@@ -48,13 +50,15 @@ export function useVocabs(minLevel: number, maxLevel: number, minSrsStage: numbe
 
         const fetchAssignments = async (url: string, relevantSubjectIds: number[]) => {
             const result = await fetchWithKey(url, apiKey);
-            const response: AssignmentsResponse = await result.json();
-            const newSubjectIds = relevantSubjectIds.concat(response.data.map(d => d.data.subject_id));
-            if (response.pages.next_url) {
-                const nextUrl = response.pages.next_url;
-                setTimeout(() => fetchAssignments(nextUrl, newSubjectIds), delayInMillis);
+            if (result.ok) {
+                const response: AssignmentsResponse = await result.json();
+                const newSubjectIds = relevantSubjectIds.concat(response.data.map(d => d.data.subject_id));
+                if (response.pages.next_url) {
+                    const nextUrl = response.pages.next_url;
+                    setTimeout(() => fetchAssignments(nextUrl, newSubjectIds), delayInMillis);
+                }
+                setRelevantSubjectIds(newSubjectIds);
             }
-            setRelevantSubjectIds(newSubjectIds);
         }
         const stages = getIdSet(minSrsStage, SRS_LEVELS.burned.level);
         fetchAssignments(`https://api.wanikani.com/v2/assignments?types=vocabulary&srs_stages=${stages}`, relevantSubjectIds);

@@ -96,7 +96,7 @@ function Stats(props: {correct: number, wrong: number}) {
 function App() {
     const [prefs, setPrefs] = useCookie();
 
-    const userLevel = useUserLevel(prefs.apiKey);
+    const { userLevel, responseCode } = useUserLevel(prefs.apiKey);
     const { vocabs, isVocabLoading } = useVocabs(
         prefs.minVocabLevel === 'mine' ? userLevel : prefs.minVocabLevel,
         prefs.maxVocabLevel === 'mine' ? userLevel : prefs.maxVocabLevel,
@@ -158,11 +158,16 @@ function App() {
                             />
                         </If>
                         <Else>
-                            <If condition={isVocabLoading}>
-                                <div className='loading'>Loading...</div>
+                            <If condition={responseCode !== 200}>
+                                <div className='status'>Failed to query WaniKani. If your API key is correct then the site may be down</div>
                             </If>
                             <Else>
-                                <div className='no-questions'>No questions match your current settings</div>
+                                <If condition={isVocabLoading}>
+                                    <div className='status'>Loading...</div>
+                                </If>
+                                <Else>
+                                    <div className='status'>No questions match your current settings</div>
+                                </Else>
                             </Else>
                         </Else>
                         <Stats correct={correct} wrong={wrong} />
