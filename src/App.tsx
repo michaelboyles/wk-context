@@ -71,7 +71,7 @@ function Answer(props: AnswerProps) {
                     <button className='incorrect' onClick={props.incorrect}><GoX title='Incorrect' /></button>
                 </div>
                 <ul className='links'>
-                    <li><a href={props.question.vocab.document_url} target='_blank'>View { props.question.vocab.characters } in <GiSadCrab className='crab' /></a></li>
+                    <li><a href={props.question.vocab.document_url} target='_blank'>View <span className='ja'>{props.question.vocab.characters}</span> in <GiSadCrab className='crab' /></a></li>
                 </ul>
             </div>
         );

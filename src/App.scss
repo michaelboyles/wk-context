@@ -11,6 +11,10 @@ $theme-off-white: #eaeaea;
 $theme-light-grey: #808080;
 $theme-grey: #5a5a5a;
 
+$wk-font-stack: "Hiragino Kaku Gothic Pro","Meiryo","Source Han Sans Japanese","NotoSansCJK",
+    "TakaoPGothic","Yu Gothic","ヒラギノ角ゴ Pro W3","メイリオ","Osaka","MS PGothic",
+    "Noto Sans JP","PingFang SC","Noto Sans SC",sans-serif;
+
 .welcome {
     .crab { 
         font-size: 30px;
@@ -86,6 +90,7 @@ footer {
     font-size: 2em;
     line-height: 1.3em;
     margin: 0;
+    font-family: $wk-font-stack;
 
     .highlight {
         color: $theme-wk-pink;
@@ -162,6 +167,10 @@ footer {
                 vertical-align: middle;
                 font-size: 1.3em;
                 margin-left: 0.1em;
+            }
+
+            .ja {
+                font-family: $wk-font-stack;
             }
 
             &:hover {
