@@ -3,7 +3,7 @@ import { SRS_LEVELS } from "../wanikani";
 
 export type Level = number | 'mine';
 
-export type IPrefs = {
+export type ISettings = {
     apiKey: string
     highlightVocab: boolean
     nativeLanguageCode: string
@@ -13,12 +13,12 @@ export type IPrefs = {
     minSrsStage: number
 }
 
-type IPrefsContext = {
-    values: IPrefs
-    setValues: (values: IPrefs) => void
+type ISettingsContext = {
+    values: ISettings
+    setValues: (values: ISettings) => void
 }
 
-export const DEFAULT_PREFS: IPrefs = Object.freeze({
+export const DEFAULT_SETTINGS: ISettings = Object.freeze({
     apiKey: '',
     highlightVocab: true,
     nativeLanguageCode: 'en',
@@ -28,7 +28,7 @@ export const DEFAULT_PREFS: IPrefs = Object.freeze({
     minSrsStage: SRS_LEVELS.apprentice.level
 });
 
-export const PrefsContext = createContext<IPrefsContext>({
-    values: DEFAULT_PREFS,
+export const SettingsContext = createContext<ISettingsContext>({
+    values: DEFAULT_SETTINGS,
     setValues: () => {}
 });

@@ -7,7 +7,7 @@ type Props = {
     children: JSX.Element
 }
 
-function Preferences(props: Props) {
+function CollapsedSection(props: Props) {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const baseClassName = 'collapsable ' + (isExpanded ? 'open ' : 'closed ');
@@ -19,4 +19,4 @@ function Preferences(props: Props) {
     )
 }
 
-export default Preferences
+export default CollapsedSection

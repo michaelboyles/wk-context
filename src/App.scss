@@ -258,7 +258,7 @@ footer {
     }
 }
 
-.collapsable.preferences {
+.collapsable.settings {
     width: 410px;
 
     form {
@@ -315,7 +315,7 @@ footer {
         text-align: start;
     }
 
-    .preferences, .loading, .no-questions {
+    .settings, .loading, .no-questions {
         grid-column: 1/3;
     }
 }

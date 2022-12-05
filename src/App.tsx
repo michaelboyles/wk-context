@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import './App.scss'
-import Preferences from './components/Preferences';
-import { PrefsContext } from './context/prefs-context';
+import Settings from './components/Settings';
+import { SettingsContext } from './context/settings-context';
 import { ContextSentence, Vocab } from './wanikani';
 import { IoMdChatboxes } from 'react-icons/io';
 import { GoCheck, GoX } from 'react-icons/go';
@@ -19,7 +19,7 @@ import { GiCrabClaw, GiSadCrab } from 'react-icons/gi';
 
 function Question(props: {question: TQuestion|null}) {
     const answerRef = useRef<any>();
-    const { values: { highlightVocab, nativeLanguageCode } } = useContext(PrefsContext);
+    const { values: { highlightVocab, nativeLanguageCode } } = useContext(SettingsContext);
     const { clientRect, textContent } = useSelectedText(answerRef);
 
     if (!props.question) return null;
@@ -135,7 +135,7 @@ function App() {
     }, [vocabs.length]);
 
     return (
-        <PrefsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
+        <SettingsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
             <div className='content'>
                 <h1><GiCrabClaw /> WKContext</h1>
                 <If condition={prefs.apiKey.length >= 1}>
@@ -166,7 +166,7 @@ function App() {
                             </Else>
                         </Else>
                         <Stats correct={correct} wrong={wrong} />
-                        <Preferences userLevel={userLevel} />
+                        <Settings userLevel={userLevel} />
                     </div>
                 </If>
                 <Else>
@@ -177,7 +177,7 @@ function App() {
                 <a href='https://github.com/michaelboyles/wk-context'>Contribute on GitHub</a>
                 <span>Content is © WaniKani</span>
             </footer>
-        </PrefsContext.Provider>
+        </SettingsContext.Provider>
     )
 }
 

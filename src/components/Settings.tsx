@@ -1,15 +1,15 @@
 import { useContext } from "react"
 import CollapsedSection from "./CollapsedSection"
-import { PrefsContext } from "../context/prefs-context"
+import { SettingsContext } from "../context/settings-context"
 import LevelInput from "./LevelInput";
 import { SRS_LEVELS } from "../wanikani";
 
-function Preferences(props: {userLevel: number}) {
-    const { values, setValues } = useContext(PrefsContext);
+function Settings(props: {userLevel: number}) {
+    const { values, setValues } = useContext(SettingsContext);
     const { apiKey, highlightVocab, nativeLanguageCode, minVocabLevel, maxVocabLevel, isQuestionVertical, minSrsStage } = values;
 
     return (
-        <CollapsedSection title='Preferences' className='preferences'>
+        <CollapsedSection title='Settings' className='settings'>
             <form>
                 <label>API key</label>
                 <input type='text'
@@ -54,4 +54,4 @@ function Preferences(props: {userLevel: number}) {
     )
 }
 
-export default Preferences
+export default Settings

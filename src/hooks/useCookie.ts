@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { IPrefs } from '../context/prefs-context';
+import { ISettings } from '../context/settings-context';
 import { readCookie, saveCookie } from '../util';
 
-export function useCookie(): [IPrefs, (prefs: IPrefs) => void] {
+export function useCookie(): [ISettings, (prefs: ISettings) => void] {
     const [prefs, setPrefs] = useState(readCookie);
-    const setAndSavePrefs = (prefs: IPrefs) => {
+    const setAndSavePrefs = (prefs: ISettings) => {
         saveCookie(prefs);
         setPrefs(prefs);
     }

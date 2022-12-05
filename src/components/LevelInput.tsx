@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Level } from '../context/prefs-context'
+import { Level } from '../context/settings-context'
 
 type Props = {
     level: Level
