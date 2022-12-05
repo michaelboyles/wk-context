@@ -1,18 +1,22 @@
-export interface VocabResponse {
+export type VocabResponse = Response<Vocab>;
+
+export type AssignmentsResponse = Response<Assignment>;
+
+export interface Response<T> {
     object:          string;
     url:             string;
     pages:           Pages;
     total_count:     number;
     data_updated_at: Date;
-    data:            Datum[];
+    data:            Datum<T>[];
 }
 
-export interface Datum {
+export interface Datum<T> {
     id:              number;
     object:          string;
     url:             string;
     data_updated_at: Date;
-    data:            Vocab;
+    data:            T;
 }
 
 export interface Vocab {
@@ -33,6 +37,21 @@ export interface Vocab {
     pronunciation_audios:        PronunciationAudio[];
     lesson_position:             number;
     spaced_repetition_system_id: number;
+}
+
+export type SubjectType = 'radical' | 'kanji' | 'vocabulary';
+
+export interface Assignment {
+    created_at:     Date;
+    subject_id:     number;
+    subject_type:   SubjectType;
+    srs_stage:      number,
+    unlocked_at:    Date | null;
+    started_at:     Date | null;
+    passed_at:      Date | null;
+    burned_at:      Date | null;
+    available_at:   Date | null;
+    resurrected_at: Date | null;
 }
 
 export interface AuxiliaryMeaning {
@@ -74,6 +93,49 @@ export interface Reading {
 
 export interface Pages {
     per_page:     number;
-    next_url:     string;
-    previous_url: null;
+    next_url:     string | null;
+    previous_url: string | null;
 }
+
+export const SRS_LEVELS = Object.freeze({
+    any: {
+        level: 0,
+        label: 'Any'
+    },
+    levelOne: {
+        level: 1,
+        label: 'Level 1'
+    },
+    levelTwo: {
+        level: 2,
+        label: 'Level 2'
+    },
+    levelThree: {
+        level: 3,
+        label: 'Level 3'
+    },
+    levelFour: {
+        level: 4,
+        label: 'Level 4'
+    },
+    apprentice: {
+        level: 5,
+        label: 'Apprentice'
+    },
+    guru: {
+        level: 6,
+        label: 'Guru'
+    },
+    master: {
+        level: 7,
+        label: 'Master'
+    },
+    enlightened: {
+        level: 8,
+        label: 'Enlightened'
+    },
+    burned: {
+        level: 9,
+        label: 'Burned'
+    }
+});

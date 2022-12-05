@@ -100,6 +100,7 @@ function App() {
     const vocabs = useVocabs(
         prefs.minVocabLevel === 'mine' ? userLevel : prefs.minVocabLevel,
         prefs.maxVocabLevel === 'mine' ? userLevel : prefs.maxVocabLevel,
+        prefs.minSrsStage,
         prefs.apiKey
     );
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);

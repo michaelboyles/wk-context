@@ -2,10 +2,11 @@ import { useContext } from "react"
 import CollapsedSection from "./CollapsedSection"
 import { PrefsContext } from "../context/prefs-context"
 import LevelInput from "./LevelInput";
+import { SRS_LEVELS } from "../wanikani";
 
 function Preferences(props: {userLevel: number}) {
     const { values, setValues } = useContext(PrefsContext);
-    const { apiKey, highlightVocab, nativeLanguageCode, minVocabLevel, maxVocabLevel, isQuestionVertical } = values;
+    const { apiKey, highlightVocab, nativeLanguageCode, minVocabLevel, maxVocabLevel, isQuestionVertical, minSrsStage } = values;
 
     return (
         <CollapsedSection title='Preferences' className='preferences'>
@@ -25,6 +26,13 @@ function Preferences(props: {userLevel: number}) {
                        checked={isQuestionVertical}
                        onChange={() => setValues({...values, isQuestionVertical: !isQuestionVertical })}
                 />
+                <label>Min SRS stage</label>
+                <select value={minSrsStage} onChange={e => setValues({...values, minSrsStage: Number(e.target.value) })}>{
+                    Object.values(SRS_LEVELS).map(
+                        value => <option key={value.level} value={value.level}>{value.label}</option>
+                    )
+                }
+                </select>
                 <label>Min vocab level</label>
                 <LevelInput level={minVocabLevel}
                             userLevel={props.userLevel}
