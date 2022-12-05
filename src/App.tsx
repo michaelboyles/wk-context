@@ -132,9 +132,9 @@ function App() {
     return (
         <PrefsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
             <div className='content'>
+                <h1><GiCrabClaw /> WKContext</h1>
                 <If condition={prefs.apiKey.length >= 1}>
                     <div className={'App ' + (prefs.isQuestionVertical ? 'vertical' : 'horizontal')}>
-                        <h1><GiCrabClaw /> WKContext</h1>
                         <Question question={currentQuestion}/>
                         <Answer question={currentQuestion}
                                 isShowing={!isQuestionPhase}

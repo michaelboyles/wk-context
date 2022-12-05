@@ -8,10 +8,20 @@ $theme-wk-blue: #1c45f5;
 $theme-wk-pink: #ff00aa;
 
 $theme-off-white: #eaeaea;
+$theme-light-grey: #808080;
+$theme-grey: #5a5a5a;
 
 .welcome {
     .crab { 
         font-size: 30px;
+    }
+
+    a {
+        color: #869dff;
+
+        &:hover {
+            color: #5978ff;
+        }
     }
 
     form {
@@ -20,10 +30,11 @@ $theme-off-white: #eaeaea;
         align-items: center;
 
         input {
-            width: 290px;
-            margin-left: 10px;
+            width: 305px;
+            margin: 0 10px;
             padding: 5px 10px;
     
+            font-size: 14px;
             font-family: "Courier New", Courier, monospace;
             font-weight: bold;
         }
@@ -44,27 +55,29 @@ $theme-off-white: #eaeaea;
     grid-template-columns: 100%;
     justify-items: center;
     align-items: center;
-
-    h1 {
-        color: #888888;
-        width: 100%;
-        text-align: left;
-        margin: 0;
-        user-select: none;
-    }
 }
 
 .content {
     flex: 1;
+
+    h1 {
+        color: #888888;
+        color: $theme-light-grey;
+        width: 100%;
+        text-align: left;
+        margin: 0;
+        user-select: none;
+        margin-bottom: 1em;
+    }
 }
 
 footer {
-    color: #888888;
+    color: $theme-light-grey;
     font-size: 12px;
     margin-top: 2em;
 
     a {
-        color: #888888;
+        color: $theme-light-grey;
         margin-right: 10px;
     }
 }
@@ -193,13 +206,15 @@ footer {
         border: 0;
         border-radius: 2px;
         cursor: pointer;
+        font-size: 13px;
         font-weight: bold;
+        background-color: $theme-light-grey;
 
         svg {
             font-size: 22px;
         }
         &:hover {
-            background-color: #5a5a5a;
+            background-color: $theme-grey;
         }
     }
 }
@@ -293,5 +308,15 @@ footer {
 
     .preferences {
         grid-column: 1/3;
+    }
+}
+
+input[type='text'], input[type='number'] {
+    border: 1px solid $theme-grey;
+    padding: 5px 10px;
+
+    &:focus {
+        outline: none;
+        border-color: $theme-light-grey;
     }
 }

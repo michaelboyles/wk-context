@@ -14,7 +14,6 @@ function Welcome(props: { onKeyEntered: (key: string) => void }) {
     }, [isValidKey]);
     return (
         <section className='welcome'>
-            <h2>Hello</h2>
             <p>This app lets you test your comprehension of Japanese words in context.</p>
             <p>It uses data from <a href='https://www.wanikani.com/' target='_blank'>WaniKani</a> so requires an account
                 and an <a href='https://www.wanikani.com/settings/personal_access_tokens' target='_blank'>API key</a>.
