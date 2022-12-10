@@ -77,7 +77,7 @@ function Answer(props: AnswerProps) {
     }
     return (
         <div className='answer'>
-            <button className='showAnswer' onClick={props.showAnswer}><IoMdChatboxes /> Show Answer</button>
+            <button className='show-answer' onClick={props.showAnswer}><IoMdChatboxes /> Show Answer</button>
         </div>
     );
 }
