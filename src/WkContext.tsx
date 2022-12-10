@@ -135,10 +135,11 @@ function WkContext() {
 
     return (
         <>
+            <h1><GiCrabClaw /><span className='app-name'>WKContext</span></h1>
             <div className='content'>
-                <h1><GiCrabClaw /> WKContext</h1>
                 <If condition={settings.apiKey.length >= 1}>
-                    <div className={'App ' + (settings.isQuestionVertical ? 'vertical' : 'horizontal')}>
+                    <div className={'app ' + (settings.isQuestionVertical ? 'vertical' : 'horizontal')}>
+                        <Stats correct={correct} wrong={wrong} />
                         <If condition={!!currentQuestion}>
                             <Question question={currentQuestion}/>
                             <Answer question={currentQuestion}
@@ -169,14 +170,15 @@ function WkContext() {
                                 </Else>
                             </Else>
                         </Else>
-                        <Stats correct={correct} wrong={wrong} />
-                        <Settings userLevel={userLevel} />
                     </div>
                 </If>
                 <Else>
                     <Welcome onKeyEntered={apiKey => setSettings({...settings, apiKey})} />
                 </Else>
             </div>
+            <If condition={settings.apiKey.length >= 1}>
+                <Settings userLevel={userLevel} />
+            </If>
             <footer>
                 <a href='https://github.com/michaelboyles/wk-context'>Contribute on GitHub</a>
                 <span>Content is © WaniKani</span>

@@ -13,7 +13,7 @@ function CollapsedSection(props: Props) {
     const baseClassName = 'collapsable ' + (isExpanded ? 'open ' : 'closed ');
     return (
         <div className={baseClassName + props?.className ?? ''}>
-            <h2 onClick={() => setIsExpanded(!isExpanded)}>{props.title} {isExpanded ? <GoChevronUp title='collapse' /> : <GoChevronDown title='expand' /> }</h2>
+            <h2 onClick={() => setIsExpanded(!isExpanded)}>{props.title} {isExpanded ? <GoChevronDown title='collapse' /> : <GoChevronUp title='expand' /> }</h2>
             { isExpanded ? props.children : null }
         </div>
     )

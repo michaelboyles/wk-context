@@ -31,11 +31,13 @@ $wk-font-stack: "Hiragino Kaku Gothic Pro","Meiryo","Source Han Sans Japanese","
 
     form {
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
 
         input {
             width: 305px;
+            max-width: 100%;
             margin: 0 10px;
             padding: 5px 10px;
     
@@ -54,26 +56,36 @@ $wk-font-stack: "Hiragino Kaku Gothic Pro","Meiryo","Source Han Sans Japanese","
     }
 }
 
-.App {
+.app {
     display: grid;
     gap: 25px;
-    grid-template-columns: 100%;
+    grid-template-columns: 1fr;
     justify-items: center;
     align-items: center;
+
+    &.horizontal {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+}
+
+h1 {
+    color: $theme-light-grey;
+    text-align: left;
+    margin: 0;
+    user-select: none;
+    margin-bottom: 1em;
+
+    svg { 
+        transform: translateY(3px);
+    }
+    .app-name {
+        margin-left: 0.3em;
+    }
 }
 
 .content {
     flex: 1;
-
-    h1 {
-        color: #888888;
-        color: $theme-light-grey;
-        width: 100%;
-        text-align: left;
-        margin: 0;
-        user-select: none;
-        margin-bottom: 1em;
-    }
 }
 
 footer {
@@ -81,9 +93,14 @@ footer {
     font-size: 12px;
     margin-top: 2em;
 
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 10px 20px;
+    line-height: 1.5em;
+
     a {
         color: $theme-light-grey;
-        margin-right: 10px;
     }
 }
 
@@ -100,7 +117,6 @@ footer {
 
 ::selection {
     background-color: #0a0a0a;
-    border-radius: 10px;
 }
 
 .popup {
@@ -143,8 +159,6 @@ footer {
 }
 
 .answer {
-    height: 175px;
-
     .sentence.en {
         margin: 0 0 1em 0;
     }
@@ -172,6 +186,7 @@ footer {
 
             .ja {
                 font-family: $wk-font-stack;
+                white-space: nowrap;
             }
 
             &:hover {
@@ -234,6 +249,7 @@ footer {
     border-radius: 4px;
     padding: 15px;
     margin: 0 auto 0 auto;
+    overflow: hidden;
 
     h2 {
         display: block;
@@ -250,16 +266,19 @@ footer {
             transition: transform 0.1s ease-out;
         }
     }
-    &.open h2:hover svg {
+    &.closed h2:hover svg {
         transform: translateY(-3px);
     }
-    &.closed h2:hover svg {
+    &.open h2:hover svg {
         transform: translateY(3px);
     }
 }
 
 .collapsable.settings {
-    width: 410px;
+    width: 440px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-top: 1em;
 
     form {
         display: grid;
@@ -297,12 +316,11 @@ footer {
     }
 }
 
-.App.vertical {
+.app.vertical {
     grid-template-columns: 1fr 1fr;
-
-    h1 {
-        grid-column: 1/3;
-    }
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
 
     .stats, .status {
         grid-column: 1/3;
@@ -335,4 +353,36 @@ select{
 	-webkit-appearance: none; 
 	appearance: none;
     padding-right: 22px;
+}
+
+@media (max-width: 300px) {
+    h1 .app-name {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) {
+    .collapsable.settings form {
+        grid-template-columns: 1fr;
+
+        label {
+            text-align: left;
+        }
+    }
+}
+
+@media (max-width: 460px) {
+    .app.vertical {
+        grid-template-columns: 1fr;
+        
+        .stats, .status {
+            grid-column: 1/2;
+        }
+    }
+}
+
+@media (max-height: 400px) {
+    h1 {
+        display: none;
+    }
 }
