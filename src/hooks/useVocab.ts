@@ -1,23 +1,17 @@
 import { useCallback, useEffect } from 'react'
 import { fetchWithKey, isValidApiKeyFormat } from '../util'
-import { EMPTY_RESPONSE, getIdSet, Vocab, VocabResponse } from '../wanikani'
+import { getIdSet, Vocab, VocabResponse } from '../wanikani'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import useSubjectIds from './useSubjectIds'
 import _ from 'lodash'
 import useDebouncedValue from './useDebouncedValue'
 
 function getVocabUrl(minLevel: number, maxLevel: number) {
-    if (maxLevel <= 0) return '';
     const levels = getIdSet(minLevel, maxLevel);
     return `https://api.wanikani.com/v2/subjects?types=vocabulary&levels=${levels}`;
 }
 
 async function fetchVocab(url: string, apiKey: string): Promise<VocabResponse> {
-    if (!isValidApiKeyFormat(apiKey)) {
-        throw 'Invalid API Key' + apiKey;
-    }
-    if (url.length === 0) return Promise.resolve(EMPTY_RESPONSE);
-
     const result = await fetchWithKey(url, apiKey);
     if (result.ok) {
         return await result.json() as VocabResponse;
@@ -33,7 +27,8 @@ export function useVocabs(minLevel: number, maxLevel: number, minSrsStage: numbe
         queryKey: ['vocab', dMinLevel, dMaxLevel],
         queryFn: ({pageParam}) => fetchVocab(pageParam ?? getVocabUrl(dMinLevel, dMaxLevel), apiKey),
         getNextPageParam: lastPage => lastPage.pages.next_url || undefined,
-        staleTime: 5 * 60 * 1000
+        staleTime: 5 * 60 * 1000,
+        enabled: dMinLevel > 0 && dMaxLevel > 0  && isValidApiKeyFormat(apiKey)
     });
 
     const debouncedFetchNextPage = useCallback(_.debounce(fetchNextPage, delayInMillis), [fetchNextPage]);

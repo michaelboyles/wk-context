@@ -1,15 +1,10 @@
 import { useCallback, useEffect } from 'react'
 import { fetchWithKey, isValidApiKeyFormat } from '../util'
-import { AssignmentsResponse, EMPTY_RESPONSE, getIdSet, SRS_LEVELS } from '../wanikani'
+import { AssignmentsResponse, getIdSet, SRS_LEVELS } from '../wanikani'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import _ from 'lodash'
 
 async function fetchAssignments(url: string, apiKey: string): Promise<AssignmentsResponse> {
-    if (!isValidApiKeyFormat(apiKey)) {
-        throw 'Invalid API Key' + apiKey;
-    }
-    if (url.length === 0) return Promise.resolve(EMPTY_RESPONSE);
-
     const result = await fetchWithKey(url, apiKey);
     if (result.ok) {
         return await result.json() as AssignmentsResponse;
@@ -28,7 +23,8 @@ export default function useSubjectIds(minSrsStage: number, apiKey: string, delay
         queryKey: ['assignments', minSrsStage, apiKey],
         queryFn: ({pageParam}) => fetchAssignments(pageParam ?? getUrl(minSrsStage), apiKey),
         getNextPageParam: lastPage => lastPage.pages.next_url || undefined,
-        staleTime: 5 * 60 * 1000
+        staleTime: 5 * 60 * 1000,
+        enabled: isValidApiKeyFormat(apiKey)
     });
     const debouncedNextPage = useCallback(_.debounce(fetchNextPage, delayInMillis), [fetchNextPage]);
     useEffect(() => {

@@ -95,7 +95,7 @@ function Stats(props: {correct: number, wrong: number}) {
 function WkContext() {
     const { values: settings, setValues: setSettings } = useContext(SettingsContext);
 
-    const { userLevel, responseCode } = useUserLevel(settings.apiKey);
+    const { userLevel, isError, isLoading: isLevelLoading } = useUserLevel(settings.apiKey);
     const { vocabs, isVocabLoading } = useVocabs(
         settings.minVocabLevel === 'mine' ? userLevel : settings.minVocabLevel,
         settings.maxVocabLevel === 'mine' ? userLevel : settings.maxVocabLevel,
@@ -133,7 +133,6 @@ function WkContext() {
         if (!currentQuestion) nextQuestion();
     }, [vocabs.length]);
 
-
     return (
         <>
             <div className='content'>
@@ -158,11 +157,11 @@ function WkContext() {
                             />
                         </If>
                         <Else>
-                            <If condition={responseCode !== 200}>
+                            <If condition={isError}>
                                 <div className='status'>Failed to query WaniKani. If your API key is correct then the site may be down</div>
                             </If>
                             <Else>
-                                <If condition={isVocabLoading}>
+                                <If condition={isLevelLoading || isVocabLoading || (!currentQuestion && vocabs.length > 0)}>
                                     <div className='status'>Loading...</div>
                                 </If>
                                 <Else>
