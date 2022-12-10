@@ -2,6 +2,19 @@ export type VocabResponse = Response<Vocab>;
 
 export type AssignmentsResponse = Response<Assignment>;
 
+export const EMPTY_RESPONSE: Response<any> = {
+    object: '',
+    url: '',
+    pages: {
+        per_page: 0,
+        next_url: null,
+        previous_url: null
+    },
+    total_count: 0,
+    data_updated_at: new Date(),
+    data: []
+}
+
 export interface Response<T> {
     object:          string;
     url:             string;
@@ -139,3 +152,10 @@ export const SRS_LEVELS = Object.freeze({
         label: 'Burned'
     }
 });
+
+export function getIdSet(min: number, max: number): string {
+    return [...Array(max).keys()]
+        .map(id => id + 1)
+        .filter(id => id >= min)
+        .join();
+}

@@ -1,21 +1,20 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import './App.scss'
-import Settings from './components/Settings';
-import { SettingsContext } from './context/settings-context';
-import { ContextSentence, Vocab } from './wanikani';
-import { IoMdChatboxes } from 'react-icons/io';
-import { GoCheck, GoX } from 'react-icons/go';
-import { SiGoogletranslate } from 'react-icons/si';
-import { useSelectedText } from './hooks/useSelectedText';
-import { If, Else } from 'jsx-conditionals';
-import { Jisho } from './icons/Jisho';
-import { clearTextSelection, randomInt } from './util';
-import { HighlightedSentence } from './components/HighlightedSentence';
-import { useUserLevel } from './hooks/useUserLevel';
-import Welcome from './components/Welcome';
-import { useCookie } from './hooks/useCookie';
-import { useVocabs } from './hooks/useVocab';
-import { GiCrabClaw, GiSadCrab } from 'react-icons/gi';
+import Settings from './components/Settings'
+import { SettingsContext } from './context/settings-context'
+import { ContextSentence, Vocab } from './wanikani'
+import { IoMdChatboxes } from 'react-icons/io'
+import { GoCheck, GoX } from 'react-icons/go'
+import { SiGoogletranslate } from 'react-icons/si'
+import { useSelectedText } from './hooks/useSelectedText'
+import { If, Else } from 'jsx-conditionals'
+import { Jisho } from './icons/Jisho'
+import { clearTextSelection, randomInt } from './util'
+import { HighlightedSentence } from './components/HighlightedSentence'
+import { useUserLevel } from './hooks/useUserLevel'
+import Welcome from './components/Welcome'
+import { useVocabs } from './hooks/useVocab'
+import { GiCrabClaw, GiSadCrab } from 'react-icons/gi'
+import './WkContext.scss'
 
 function Question(props: {question: TQuestion|null}) {
     const answerRef = useRef<any>();
@@ -93,15 +92,15 @@ function Stats(props: {correct: number, wrong: number}) {
     )
 }
 
-function App() {
-    const [prefs, setPrefs] = useCookie();
+function WkContext() {
+    const { values: settings, setValues: setSettings } = useContext(SettingsContext);
 
-    const { userLevel, responseCode } = useUserLevel(prefs.apiKey);
+    const { userLevel, responseCode } = useUserLevel(settings.apiKey);
     const { vocabs, isVocabLoading } = useVocabs(
-        prefs.minVocabLevel === 'mine' ? userLevel : prefs.minVocabLevel,
-        prefs.maxVocabLevel === 'mine' ? userLevel : prefs.maxVocabLevel,
-        prefs.minSrsStage,
-        prefs.apiKey
+        settings.minVocabLevel === 'mine' ? userLevel : settings.minVocabLevel,
+        settings.maxVocabLevel === 'mine' ? userLevel : settings.maxVocabLevel,
+        settings.minSrsStage,
+        settings.apiKey
     );
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState<TQuestion|null>(null);
@@ -134,12 +133,13 @@ function App() {
         if (!currentQuestion) nextQuestion();
     }, [vocabs.length]);
 
+
     return (
-        <SettingsContext.Provider value={{ values: prefs, setValues: setPrefs }}>
+        <>
             <div className='content'>
                 <h1><GiCrabClaw /> WKContext</h1>
-                <If condition={prefs.apiKey.length >= 1}>
-                    <div className={'App ' + (prefs.isQuestionVertical ? 'vertical' : 'horizontal')}>
+                <If condition={settings.apiKey.length >= 1}>
+                    <div className={'App ' + (settings.isQuestionVertical ? 'vertical' : 'horizontal')}>
                         <If condition={!!currentQuestion}>
                             <Question question={currentQuestion}/>
                             <Answer question={currentQuestion}
@@ -175,15 +175,15 @@ function App() {
                     </div>
                 </If>
                 <Else>
-                    <Welcome onKeyEntered={apiKey => setPrefs({...prefs, apiKey})} />
+                    <Welcome onKeyEntered={apiKey => setSettings({...settings, apiKey})} />
                 </Else>
             </div>
             <footer>
                 <a href='https://github.com/michaelboyles/wk-context'>Contribute on GitHub</a>
                 <span>Content is © WaniKani</span>
             </footer>
-        </SettingsContext.Provider>
+        </>
     )
 }
 
-export default App
+export default WkContext
