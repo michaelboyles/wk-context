@@ -17,6 +17,9 @@ export function useUserLevel(apiKey: string) {
             }
             doFetch();
         }
+        else {
+            setResponseCode(500);
+        }
     }, [apiKey]);
 
     return { userLevel, responseCode } ;
