@@ -1,11 +1,10 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { CSSProperties, useContext, useEffect, useRef, useState } from 'react'
 import Settings from './components/Settings'
 import { SettingsContext } from './context/settings-context'
 import { ContextSentence, Vocab } from './wanikani'
 import { IoMdChatboxes } from 'react-icons/io'
 import { GoCheck, GoX } from 'react-icons/go'
 import { SiGoogletranslate } from 'react-icons/si'
-import { useSelectedText } from './hooks/useSelectedText'
 import { If, Else } from 'jsx-conditionals'
 import { Jisho } from './icons/Jisho'
 import { clearTextSelection, randomInt } from './util'
@@ -14,18 +13,34 @@ import { useUserLevel } from './hooks/useUserLevel'
 import Welcome from './components/Welcome'
 import { useVocabs } from './hooks/useVocab'
 import { GiCrabClaw, GiSadCrab } from 'react-icons/gi'
+import { useTextSelection, ClientRect } from './hooks/useTextSelection'
 import './WkContext.scss'
 
-function Question(props: {question: TQuestion|null}) {
+function getPopupStyle(isVertical: boolean, selection?: ClientRect): CSSProperties {
+    if (!selection) return {};
+
+    if (isVertical) {
+        return { top: selection.y, left: selection.right }
+    }
+    else {
+        const clientWidth = document.body.clientWidth;
+        if ((clientWidth - selection.x) < 100) {
+            return { top: selection.y, right: clientWidth - selection.right }
+        }
+        return { top: selection.y, left: selection.x }
+    }
+}
+
+function Question(props: {question?: TQuestion}) {
     const answerRef = useRef<any>();
-    const { values: { highlightVocab, nativeLanguageCode } } = useContext(SettingsContext);
-    const { clientRect, textContent } = useSelectedText(answerRef);
+    const { values: { highlightVocab, nativeLanguageCode, isQuestionVertical } } = useContext(SettingsContext);
+    const { clientRect, textContent } = useTextSelection(answerRef.current);
 
     if (!props.question) return null;
     return (
         <>
             <If condition={!!clientRect && (textContent?.length ?? 0) >= 1}>
-                <div className='popup' style={ {top: clientRect!.y, left: clientRect!.x }}>
+                <div className='popup' style={getPopupStyle(isQuestionVertical, clientRect)}>
                     <a className='jisho' target='_blank'
                        href={'https://jisho.org/search/' + textContent}>
                         <Jisho /> Jisho
@@ -36,12 +51,14 @@ function Question(props: {question: TQuestion|null}) {
                     </a>
                 </div>
             </If>
-            <p className='sentence ja' ref={answerRef}>
-                <If condition={highlightVocab}>
-                    <HighlightedSentence word={props.question.vocab.characters} sentence={props.question.sentence.ja} />
-                </If>
-                <Else>{props.question.sentence.ja}</Else>
-            </p>
+            <div ref={answerRef}>
+                <p className='sentence ja'>
+                    <If condition={highlightVocab}>
+                        <HighlightedSentence word={props.question.vocab.characters} sentence={props.question.sentence.ja} />
+                    </If>
+                    <Else>{props.question.sentence.ja}</Else>
+                </p>
+            </div>
         </>
     );
 }
@@ -52,7 +69,7 @@ type TQuestion = {
 }
 
 type AnswerProps = {
-    question: TQuestion|null
+    question?: TQuestion
     isShowing: boolean
     showAnswer: () => void
     correct: () => void
@@ -103,13 +120,13 @@ function WkContext() {
         settings.apiKey
     );
     const [isQuestionPhase, setIsQuestionPhase] = useState(false);
-    const [currentQuestion, setCurrentQuestion] = useState<TQuestion|null>(null);
+    const [currentQuestion, setCurrentQuestion] = useState<TQuestion|undefined>(undefined);
     const [correct, setCorrect] = useState(0);
     const [wrong, setWrong] = useState(0);
 
     const nextQuestion = () => {
         if (vocabs.length < 1) {
-            setCurrentQuestion(null);
+            setCurrentQuestion(undefined);
         }
         else {
             while (true) {

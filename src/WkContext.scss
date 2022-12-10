@@ -66,6 +66,10 @@ $wk-font-stack: "Hiragino Kaku Gothic Pro","Meiryo","Source Han Sans Japanese","
     &.horizontal {
         max-width: 800px;
         margin: 0 auto;
+
+        .popup {
+            translate: 0 -100%;
+        }
     }
 }
 
@@ -120,12 +124,11 @@ footer {
 }
 
 .popup {
-    position: absolute;
+    position: fixed;
     display: flex;
     gap: 15px;
     background-color: #0a0a0a;
     user-select: none;
-    translate: 0 -100%;
     padding: 8px 12px;
 
     a {
@@ -356,12 +359,6 @@ select{
     padding-right: 22px;
 }
 
-@media (max-width: 300px) {
-    h1 .app-name {
-        display: none;
-    }
-}
-
 @media (max-width: 500px) {
     .collapsable.settings form {
         grid-template-columns: 1fr;
@@ -370,7 +367,31 @@ select{
             text-align: left;
         }
     }
+}
 
+@media (max-width: 460px) {
+    .app.vertical {
+        grid-template-columns: 1fr;
+        
+        .stats, .status {
+            grid-column: 1/2;
+        }
+    }
+}
+
+@media (max-width: 300px) {
+    h1 .app-name {
+        display: none;
+    }
+}
+
+@media (max-height: 400px) {
+    h1 {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) and (max-height: 400px) {
     .answer {
         .sentence.en {
             margin-bottom: 2em;
@@ -389,21 +410,5 @@ select{
                 padding: 10px 30px;
             }
         }
-    }
-}
-
-@media (max-width: 460px) {
-    .app.vertical {
-        grid-template-columns: 1fr;
-        
-        .stats, .status {
-            grid-column: 1/2;
-        }
-    }
-}
-
-@media (max-height: 400px) {
-    h1 {
-        display: none;
     }
 }
