@@ -176,6 +176,7 @@ footer {
             color: $theme-wk-blue;
             text-decoration: none;
             font-weight: bold;
+            user-select: none;
 
             svg {
                 display: inline-block;
@@ -198,7 +199,7 @@ footer {
     .correct, .incorrect {
         border: 0;
         border-radius: 2px;
-        padding: 5px 6px 1px 6px;
+        padding: 7px 8px 2px 8px;
         margin: 0 8px;
         cursor: pointer;
         font-size: 20px;
@@ -371,6 +372,9 @@ select{
     }
 
     .answer {
+        .sentence.en {
+            margin-bottom: 2em;
+        }
         .correct, .incorrect {
             padding: 15px 15px 11px 15px;
         }
@@ -378,8 +382,12 @@ select{
             padding: 12px 18px;
             font-size: 15px;
         }
-        .links a {
-            padding: 10px 30px;
+        .links {
+            margin: 2em 0;
+
+            a {
+                padding: 10px 30px;
+            }
         }
     }
 }
