@@ -45,3 +45,27 @@ export function readCookie(): ISettings {
         ...DEFAULT_SETTINGS, ...parsed
     };
 }
+
+// Get all the minimal items in the array, subject to the given comparator
+export function minimums<T>(items: T[], compare: (a: T, b: T) => number): T[]  {
+    let currentMins: T[] = [];
+    items.forEach(item => {
+        if (currentMins.length === 0) {
+            currentMins.push(item);
+        }
+        else {
+            const result = compare(item, currentMins[0]);
+            if (result < 0) {
+                currentMins = [item];
+            }
+            else if (result === 0) {
+                currentMins.push(item);
+            }
+        }
+    });
+    return currentMins;
+}
+
+export function maximums<T>(items: T[], compare: (a: T, b: T) => number): T[]  {
+    return minimums(items, (a, b) => compare(b, a));
+}

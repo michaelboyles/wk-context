@@ -6,17 +6,6 @@ import { useCallback, useLayoutEffect, useState } from 'react'
 
 export type ClientRect = Record<keyof Omit<DOMRect, "toJSON">, number>
 
-function roundValues(_rect: ClientRect) {
-  const rect = {
-    ..._rect
-  }
-  for (const key of Object.keys(rect)) {
-    // @ts-ignore
-    rect[key] = Math.round(rect[key])
-  }
-  return rect
-}
-
 function shallowDiff(prev: any, next: any) {
   if (prev != null && next != null) {
     for (const key of Object.keys(next)) {
@@ -31,7 +20,7 @@ function shallowDiff(prev: any, next: any) {
 }
 
 type TextSelectionState = {
-  clientRect?: ClientRect,
+  clientRects?: DOMRectList,
   isCollapsed?: boolean,
   textContent?: string
 }
@@ -40,13 +29,13 @@ const defaultState: TextSelectionState = {}
 
 export function useTextSelection(target?: HTMLElement) {
   const [{
-    clientRect,
+    clientRects,
     isCollapsed,
     textContent,
   }, setState] = useState<TextSelectionState>(defaultState)
 
   const handler = useCallback(() => {
-    let newRect: ClientRect
+    let newRects: DOMRectList
     const selection = window.getSelection()
     let newState: TextSelectionState = { }
 
@@ -82,17 +71,9 @@ export function useTextSelection(target?: HTMLElement) {
       newState.textContent = contents.textContent
     }
 
-    const rects = range.getClientRects()
-
-    if (rects.length === 0 && range.commonAncestorContainer != null) {
-      const el = range.commonAncestorContainer as HTMLElement
-      newRect = roundValues(el.getBoundingClientRect().toJSON())
-    } else {
-      if (rects.length < 1) return
-      newRect = roundValues(rects[0].toJSON())
-    }
-    if (shallowDiff(clientRect, newRect)) {
-      newState.clientRect = newRect
+    newRects = range.getClientRects();
+    if (shallowDiff(clientRects, newRects)) {
+      newState.clientRects = newRects
     }
     newState.isCollapsed = range.collapsed
 
@@ -114,7 +95,7 @@ export function useTextSelection(target?: HTMLElement) {
   }, [target])
 
   return {
-    clientRect,
+    clientRects: [...(clientRects ?? [])],
     isCollapsed,
     textContent
   }

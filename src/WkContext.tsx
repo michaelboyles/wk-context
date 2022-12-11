@@ -7,40 +7,56 @@ import { GoCheck, GoX } from 'react-icons/go'
 import { SiGoogletranslate } from 'react-icons/si'
 import { If, Else } from 'jsx-conditionals'
 import { Jisho } from './icons/Jisho'
-import { clearTextSelection, randomInt } from './util'
+import { clearTextSelection, maximums, minimums, randomInt } from './util'
 import { HighlightedSentence } from './components/HighlightedSentence'
 import { useUserLevel } from './hooks/useUserLevel'
 import Welcome from './components/Welcome'
 import { useVocabs } from './hooks/useVocab'
 import { GiCrabClaw, GiSadCrab } from 'react-icons/gi'
-import { useTextSelection, ClientRect } from './hooks/useTextSelection'
+import { useTextSelection } from './hooks/useTextSelection'
 import './WkContext.scss'
 
-function getPopupStyle(isVertical: boolean, selection?: ClientRect): CSSProperties {
-    if (!selection) return {};
-
+function getPopupStyle(isVertical: boolean, selection: DOMRect[]): CSSProperties {
+    if (!selection) {
+        return {};
+    }
     if (isVertical) {
-        return { top: selection.y, left: selection.right }
+        const rightMostRects = maximums(selection, (a, b) => a.x - b.x);
+        if (rightMostRects.length === 0) {
+            return {};
+        }
+
+        const top = Math.min(...rightMostRects.map(rect => rect.y));
+        const left = rightMostRects[0].right;
+        return { top, left }
     }
     else {
-        const clientWidth = document.body.clientWidth;
-        if ((clientWidth - selection.x) < 100) {
-            return { top: selection.y, right: clientWidth - selection.right }
+        const highestRects = minimums(selection, (a, b) => a.y - b.y);
+        if (highestRects.length === 0) {
+            return {};
         }
-        return { top: selection.y, left: selection.x }
+        const clientWidth = document.body.clientWidth;
+        const top = highestRects[0].y;
+        const left = Math.min(...highestRects.map(rect => rect.left));
+
+        if ((clientWidth - left) < 130) {
+            const right = clientWidth - Math.max(...highestRects.map(rect => rect.right));
+            return { top, right }
+        }
+        return { top, left }
     }
 }
 
 function Question(props: {question?: TQuestion}) {
     const answerRef = useRef<any>();
     const { values: { highlightVocab, nativeLanguageCode, isQuestionVertical } } = useContext(SettingsContext);
-    const { clientRect, textContent } = useTextSelection(answerRef.current);
+    const { clientRects, textContent } = useTextSelection(answerRef.current);
 
     if (!props.question) return null;
     return (
         <>
-            <If condition={!!clientRect && (textContent?.length ?? 0) >= 1}>
-                <div className='popup' style={getPopupStyle(isQuestionVertical, clientRect)}>
+            <If condition={!!clientRects && (textContent?.length ?? 0) >= 1}>
+                <div className='popup' style={getPopupStyle(isQuestionVertical, clientRects)}>
                     <a className='jisho' target='_blank'
                        href={'https://jisho.org/search/' + textContent}>
                         <Jisho /> Jisho
