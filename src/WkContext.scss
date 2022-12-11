@@ -391,7 +391,7 @@ select{
     }
 }
 
-@media (max-width: 500px) and (max-height: 400px) {
+@media (max-width: 500px) or (max-height: 400px) {
     .answer {
         .sentence.en {
             margin-bottom: 2em;
