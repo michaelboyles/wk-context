@@ -5,7 +5,7 @@ import { ContextSentence, Vocab } from './wanikani'
 import { IoMdChatboxes } from 'react-icons/io'
 import { GoCheck, GoX } from 'react-icons/go'
 import { SiGoogletranslate } from 'react-icons/si'
-import { If, Else } from 'jsx-conditionals'
+import { If, Else, ElseIf } from 'jsx-conditionals'
 import { Jisho } from './icons/Jisho'
 import { clearTextSelection, maximums, minimums, randomInt } from './util'
 import { HighlightedSentence } from './components/HighlightedSentence'
@@ -55,7 +55,7 @@ function Question(props: {question?: TQuestion}) {
     if (!props.question) return null;
     return (
         <>
-            <If condition={!!clientRects && (textContent?.length ?? 0) >= 1}>
+            <If condition={clientRects && textContent?.length}>
                 <div className='popup' style={getPopupStyle(isQuestionVertical, clientRects)}>
                     <a className='jisho' target='_blank'
                        href={'https://jisho.org/search/' + textContent}>
@@ -170,10 +170,10 @@ function WkContext() {
         <>
             <h1><GiCrabClaw /><span className='app-name'>WKContext</span></h1>
             <div className='content'>
-                <If condition={settings.apiKey.length >= 1}>
+                <If condition={settings.apiKey.length}>
                     <div className={'app ' + (settings.isQuestionVertical ? 'vertical' : 'horizontal')}>
                         <Stats correct={correct} wrong={wrong} />
-                        <If condition={!!currentQuestion}>
+                        <If condition={currentQuestion}>
                             <Question question={currentQuestion}/>
                             <Answer question={currentQuestion}
                                     isShowing={!isQuestionPhase}
@@ -190,18 +190,14 @@ function WkContext() {
                                     }}
                             />
                         </If>
+                        <ElseIf condition={isError}>
+                            <div className='status'>Failed to query WaniKani. If your API key is correct then the site may be down</div>
+                        </ElseIf>
+                        <ElseIf condition={isLevelLoading || isVocabLoading || (!currentQuestion && vocabs.length > 0)}>
+                            <div className='status'>Loading...</div>
+                        </ElseIf>
                         <Else>
-                            <If condition={isError}>
-                                <div className='status'>Failed to query WaniKani. If your API key is correct then the site may be down</div>
-                            </If>
-                            <Else>
-                                <If condition={isLevelLoading || isVocabLoading || (!currentQuestion && vocabs.length > 0)}>
-                                    <div className='status'>Loading...</div>
-                                </If>
-                                <Else>
-                                    <div className='status'>No questions match your current settings</div>
-                                </Else>
-                            </Else>
+                            <div className='status'>No questions match your current settings</div>
                         </Else>
                     </div>
                 </If>
@@ -209,7 +205,7 @@ function WkContext() {
                     <Welcome onKeyEntered={apiKey => setSettings({...settings, apiKey})} />
                 </Else>
             </div>
-            <If condition={settings.apiKey.length >= 1}>
+            <If condition={settings.apiKey.length}>
                 <Settings userLevel={userLevel} />
             </If>
             <footer>
