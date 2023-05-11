@@ -41,6 +41,7 @@ $wk-font-stack: "Hiragino Kaku Gothic Pro","Meiryo","Source Han Sans Japanese","
             margin: 0 10px;
             padding: 5px 10px;
     
+            color: white;
             font-size: 14px;
             font-family: "Courier New", Courier, monospace;
             font-weight: bold;
@@ -235,6 +236,7 @@ footer {
         border: 0;
         border-radius: 2px;
         cursor: pointer;
+        color: white;
         font-size: 13px;
         font-weight: bold;
         background-color: $theme-light-grey;
@@ -297,6 +299,13 @@ footer {
             text-align: right;
             line-height: 1.2em;
             width: 100%;
+        }
+
+        input, select {
+            color: white;
+            &:disabled {
+                color: rgb(170, 170, 170);
+            }
         }
 
         input[type='text'] {
