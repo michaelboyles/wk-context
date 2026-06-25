@@ -4,7 +4,7 @@ import { GiSadCrab } from 'react-icons/gi'
 import { GoX } from 'react-icons/go'
 import { isValidApiKeyFormat } from '../util';
 
-function Welcome(props: { onKeyEntered: (key: string) => void }) {
+export function Welcome(props: { onKeyEntered: (key: string) => void }) {
     const [key, setKey] = useState('');
     const isValidKey = isValidApiKeyFormat(key);
     useEffect(() => {
@@ -36,5 +36,3 @@ function Welcome(props: { onKeyEntered: (key: string) => void }) {
         </section>
     )
 }
-
-export default Welcome

@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Level } from '../context/settings-context'
+import type { Level } from '../context/settings-context'
 
 type Props = {
     level: Level
@@ -7,7 +6,7 @@ type Props = {
     setValue: (level: Level) => void
 }
 
-function LevelInput(props: Props) {
+export function LevelInput(props: Props) {
     const isMine = props.level === 'mine';
     const levelNumber = props.level === 'mine' ? props.userLevel : props.level;
     return (
@@ -33,5 +32,3 @@ function LevelInput(props: Props) {
         </div>
     )
 }
-
-export default LevelInput

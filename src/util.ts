@@ -1,14 +1,14 @@
-import { DEFAULT_SETTINGS, ISettings } from "./context/settings-context";
+import { DEFAULT_SETTINGS, type Settings } from "./context/settings-context";
 
 export function clearTextSelection() {
-    var sel = window.getSelection ? window.getSelection() : (document as any).selection;
+    let sel = window.getSelection ? window.getSelection() : (document as any).selection;
     if (sel) {
         if (sel.removeAllRanges) {
             sel.removeAllRanges();
         } else if (sel.empty) {
             sel.empty();
         }
-    };
+    }
 }
 
 export function randomInt(max: number) {
@@ -27,11 +27,11 @@ export function isValidApiKeyFormat(possibleToken: string) {
     return /^[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}$/g.test(possibleToken);
 }
 
-export function saveCookie(data: ISettings) {
+export function saveCookie(data: Settings) {
     document.cookie = 'prefs=' + JSON.stringify(data) + '; expires=Tue, 19 Jan 2038 03:14:07 UTC';
 }
 
-export function readCookie(): ISettings {
+export function readCookie(): Settings {
     const cookiePrefs = document.cookie.split('; ')
         .map(prop => prop.split('='))
         .find(kvPair => kvPair[0] === 'prefs')?.[1];
@@ -68,4 +68,12 @@ export function minimums<T>(items: T[], compare: (a: T, b: T) => number): T[]  {
 
 export function maximums<T>(items: T[], compare: (a: T, b: T) => number): T[]  {
     return minimums(items, (a, b) => compare(b, a));
+}
+
+export function debounce<T extends (...args: any[]) => void>(fn: T, delay: number): (...args: Parameters<T>) => void {
+    let timeout: ReturnType<typeof setTimeout>;
+    return (...args: Parameters<T>) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn(...args), delay);
+    };
 }

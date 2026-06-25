@@ -3,7 +3,7 @@ import { SRS_LEVELS } from "../wanikani";
 
 export type Level = number | 'mine';
 
-export type ISettings = {
+export type Settings = {
     apiKey: string
     highlightVocab: boolean
     nativeLanguageCode: string
@@ -14,11 +14,11 @@ export type ISettings = {
 }
 
 type ISettingsContext = {
-    values: ISettings
-    setValues: (values: ISettings) => void
+    values: Settings
+    setValues: (values: Settings) => void
 }
 
-export const DEFAULT_SETTINGS: ISettings = Object.freeze({
+export const DEFAULT_SETTINGS: Settings = Object.freeze({
     apiKey: '',
     highlightVocab: true,
     nativeLanguageCode: 'en',

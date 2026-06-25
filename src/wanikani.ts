@@ -2,7 +2,7 @@ export type VocabResponse = Response<Vocab>;
 
 export type AssignmentsResponse = Response<Assignment>;
 
-export interface Response<T> {
+export type Response<T> = {
     object:          string;
     url:             string;
     pages:           Pages;
@@ -11,7 +11,7 @@ export interface Response<T> {
     data:            Datum<T>[];
 }
 
-export interface Datum<T> {
+export type Datum<T> = {
     id:              number;
     object:          string;
     url:             string;
@@ -19,7 +19,7 @@ export interface Datum<T> {
     data:            T;
 }
 
-export interface Vocab {
+export type Vocab = {
     created_at:                  Date;
     level:                       number;
     slug:                        string;
@@ -41,57 +41,57 @@ export interface Vocab {
 
 export type SubjectType = 'radical' | 'kanji' | 'vocabulary';
 
-export interface Assignment {
-    created_at:     Date;
-    subject_id:     number;
-    subject_type:   SubjectType;
-    srs_stage:      number,
-    unlocked_at:    Date | null;
-    started_at:     Date | null;
-    passed_at:      Date | null;
-    burned_at:      Date | null;
-    available_at:   Date | null;
-    resurrected_at: Date | null;
+export type Assignment = {
+    created_at:     Date
+    subject_id:     number
+    subject_type:   SubjectType
+    srs_stage:      number
+    unlocked_at:    Date | null
+    started_at:     Date | null
+    passed_at:      Date | null
+    burned_at:      Date | null
+    available_at:   Date | null
+    resurrected_at: Date | null
 }
 
-export interface AuxiliaryMeaning {
-    type:    string;
-    meaning: string;
+export type AuxiliaryMeaning = {
+    type:    string
+    meaning: string
 }
 
-export interface ContextSentence {
-    en: string;
-    ja: string;
+export type ContextSentence = {
+    en: string
+    ja: string
 }
 
-export interface Meaning {
-    meaning:         string;
-    primary:         boolean;
-    accepted_answer: boolean;
+export type Meaning = {
+    meaning:         string
+    primary:         boolean
+    accepted_answer: boolean
 }
 
-export interface PronunciationAudio {
-    url:          string;
-    metadata:     Metadata;
-    content_type: string;
+export type PronunciationAudio = {
+    url:          string
+    metadata:     Metadata
+    content_type: string
 }
 
-export interface Metadata {
-    gender:            string;
-    source_id:         number;
-    pronunciation:     string;
-    voice_actor_id:    number;
-    voice_actor_name:  string;
-    voice_description: string;
+export type Metadata = {
+    gender:            string
+    source_id:         number
+    pronunciation:     string
+    voice_actor_id:    number
+    voice_actor_name:  string
+    voice_description: string
 }
 
-export interface Reading {
+export type Reading = {
     primary:         boolean;
     reading:         string;
     accepted_answer: boolean;
 }
 
-export interface Pages {
+export type Pages = {
     per_page:     number;
     next_url:     string | null;
     previous_url: string | null;

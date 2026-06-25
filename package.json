@@ -1,30 +1,29 @@
 {
-    "name": "wk-sentences",
+    "name": "wkcontext",
     "private": true,
     "version": "0.0.0",
     "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "typecheck": "tsc"
     },
     "dependencies": {
-        "@tanstack/react-query": "^4.19.1",
-        "lodash": "^4.17.21",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "react-icons": "^4.7.1"
+        "@tanstack/react-query": "^5.101.1",
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
+        "react-icons": "^5.6.0"
     },
     "devDependencies": {
-        "@rollup/plugin-typescript": "^10.0.1",
-        "@types/lodash": "^4.14.191",
-        "@types/react": "^18.0.24",
-        "@types/react-dom": "^18.0.8",
-        "@vitejs/plugin-react": "^2.2.0",
-        "jsx-conditionals": "^1.1.0",
-        "sass": "^1.56.1",
-        "ttypescript": "^1.5.13",
-        "typescript": "^4.6.4",
-        "vite": "^3.2.3"
+        "@babel/plugin-syntax-typescript": "^8.0.1",
+        "@rolldown/plugin-babel": "^0.2.3",
+        "@types/react": "^19.2.17",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^6.0.3",
+        "jsx-conditionals": "^1.2.0",
+        "sass": "^1.101.0",
+        "typescript": "^6.0.3",
+        "vite": "^8.1.0"
     }
 }

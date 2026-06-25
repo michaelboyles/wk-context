@@ -27,7 +27,7 @@ type TextSelectionState = {
 
 const defaultState: TextSelectionState = {}
 
-export function useTextSelection(target?: HTMLElement) {
+export function useTextSelection(target: HTMLElement | null) {
   const [{
     clientRects,
     isCollapsed,

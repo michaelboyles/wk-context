@@ -1,15 +1,6 @@
 import { fetchWithKey, isValidApiKeyFormat } from '../util'
 import { useQuery } from '@tanstack/react-query'
 
-async function fetchUserLevel(apiKey: string): Promise<number> {
-    const response = await fetchWithKey('https://api.wanikani.com/v2/user', apiKey);
-    if (response.ok) {
-        const json = await response.json();
-        return json.data.level;
-    }
-    throw 'Bad response ' + response.status;
-}
-
 export function useUserLevel(apiKey: string) {
     const { data, error, isLoading } = useQuery({
         queryKey: ['userLevel', apiKey],
@@ -24,4 +15,13 @@ export function useUserLevel(apiKey: string) {
         isError: !isValidApiKeyFormat(apiKey) || !!error,
         isLoading
     } ;
+}
+
+async function fetchUserLevel(apiKey: string): Promise<number> {
+    const response = await fetchWithKey('https://api.wanikani.com/v2/user', apiKey);
+    if (response.ok) {
+        const json = await response.json();
+        return json.data.level;
+    }
+    throw 'Bad response ' + response.status;
 }

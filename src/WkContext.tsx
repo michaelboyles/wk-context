@@ -1,5 +1,5 @@
-import { CSSProperties, useContext, useEffect, useRef, useState } from 'react'
-import Settings from './components/Settings'
+import { type ComponentRef, CSSProperties, useContext, useEffect, useRef, useState } from 'react'
+import { Settings } from './components/Settings'
 import { SettingsContext } from './context/settings-context'
 import { ContextSentence, Vocab } from './wanikani'
 import { IoMdChatboxes } from 'react-icons/io'
@@ -10,7 +10,7 @@ import { Jisho } from './icons/Jisho'
 import { clearTextSelection, maximums, minimums, randomInt } from './util'
 import { HighlightedSentence } from './components/HighlightedSentence'
 import { useUserLevel } from './hooks/useUserLevel'
-import Welcome from './components/Welcome'
+import { Welcome } from './components/Welcome'
 import { useVocabs } from './hooks/useVocab'
 import { GiCrabClaw, GiSadCrab } from 'react-icons/gi'
 import { useTextSelection } from './hooks/useTextSelection'
@@ -48,7 +48,7 @@ function getPopupStyle(isVertical: boolean, selection: DOMRect[]): CSSProperties
 }
 
 function Question(props: {question?: TQuestion}) {
-    const answerRef = useRef<any>();
+    const answerRef = useRef<ComponentRef<"div">>(null);
     const { values: { highlightVocab, nativeLanguageCode, isQuestionVertical } } = useContext(SettingsContext);
     const { clientRects, textContent } = useTextSelection(answerRef.current);
 
